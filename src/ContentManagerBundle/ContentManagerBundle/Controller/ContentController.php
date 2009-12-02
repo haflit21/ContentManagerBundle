@@ -77,7 +77,7 @@ class ContentController extends Controller
         $content = new CMContent;
         $language = $this->getDoctrine()->getRepository('ContentManagerBundle:CMLanguage')->find($lang);
         $content->setLanguage($language);
-        $form = $this->createForm(new ContentType(), $content);
+        $form = $this->createForm(new ContentType(), $content, array('lang'=>$language->getIso()));
         $contenttype = $request->query->get('contentType');
         $html = ExtraFields::loadFields($this, $contenttype);
         if ($request->isMethod('POST')) {
@@ -120,7 +120,7 @@ class ContentController extends Controller
         $content = new CMContent;
         $language = $this->getDoctrine()->getRepository('ContentManagerBundle:CMLanguage')->find($lang);
         $content->setLanguage($language);
-        $form = $this->createForm(new ContentType(), $content);
+        $form = $this->createForm(new ContentType(), $content, array('lang'=>$language->getIso()));
         $html = ExtraFields::loadFields($this, $contenttype);
 
         if ($request->isMethod('POST')) {
@@ -181,7 +181,7 @@ class ContentController extends Controller
             
         }
 
-        $form = $this->createForm(new ContentType(), $content);
+        $form = $this->createForm(new ContentType(), $content, array('lang'=>$content->getLanguage()->getIso()));
 
         if ($request->isMethod('POST')) {
         	$form->bind($request);

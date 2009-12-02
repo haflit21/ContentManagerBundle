@@ -43,8 +43,8 @@ class ContentType extends AbstractType
             ))*/
             ->add('categories', 'entity', array(
                 'class'=>'ContentManagerBundle:CMCategory',
-                'query_builder' => function(CategoryRepository $er) {
-                    return $er->getCategoriesByLangIso();
+                'query_builder' => function(CategoryRepository $er) use ($options) {
+                    return $er->getCategoriesByLangIso($options['lang']);
                 },
                 'label'=>'Categories',
                 'property'=>'title',
@@ -61,7 +61,8 @@ class ContentType extends AbstractType
     public function setDefaultOptions(OptionsResolverInterface $resolver)
     {
         $resolver->setDefaults(array(
-            'data_class' => 'ContentManagerBundle\ContentManagerBundle\Entity\CMContent'
+            'data_class' => 'ContentManagerBundle\ContentManagerBundle\Entity\CMContent',
+            'lang' => 'fr-FR'
         ));
     }
 

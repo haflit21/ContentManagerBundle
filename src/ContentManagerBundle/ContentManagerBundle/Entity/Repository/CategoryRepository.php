@@ -21,13 +21,7 @@ class CategoryRepository extends EntityRepository
 	               	->getResult();
 	}
 
-	function getCategoriesByLangIso($lang=null){
-		if($lang==null){
-			return $this->_em
-	    			->createQueryBuilder()
-	    			->select('c')
-	       			->from('ContentManagerBundle:CMCategory', 'c');
-		}
+	function getCategoriesByLangIso($lang){
 	    return $this->_em
 	    			->createQueryBuilder()
 	    			->select('c')
