@@ -26,18 +26,19 @@ class ContentController extends Controller
     public function listAction()
     {
     	$defaultLanguage = $this->getLanguageDefault();
+
+        if(empty($defaultLanguage)){
+            $this->get('session')->getFlashBag()->add('error', 'No default language exist. Please create one.');
+            
+            return array('display'=>false);
+        }
+        
     	$languages = $this->getLanguages();
         $contentType = $this->generateListTypeField();
         $contents = $this->getDoctrine()->getRepository('ContentManagerBundle:CMContent')->getContentByLangId($defaultLanguage->getId());
 
         $request = $this->getRequest();
         $locale = $request->getLocale();
-
-    	if(empty($defaultLanguage)){
-			$this->get('session')->getFlashBag()->add('error', 'No default language exist. Please create one.');
-			
-			return array('display'=>false);
-    	}
 
         return array('contents'=>$contents, 'defaultLanguage'=>$defaultLanguage, 'languages'=>$languages, 'display'=>true, 'contentType'=>$contentType);
     }

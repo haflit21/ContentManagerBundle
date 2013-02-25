@@ -1,11 +1,11 @@
 <?php
 
-namespace Gmu\ContentManager\DataFixtures\ORM;
+namespace ContentManagerBundle\ContentManagerBundle\DataFixtures\ORM;
 
 use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
-use Gmu\ContentManager\Entity\CMLanguage;
+use ContentManagerBundle\ContentManagerBundle\Entity\CMLanguage;
 
 /**
  * Load GameData
@@ -25,7 +25,7 @@ class LoadContentManagerData implements FixtureInterface
             $lang->setTitle($lg['title']);
             $lang->setIso($lg['iso']);
             $lang->setPublished($lg['published']);
-            $lang->setDefault($lg['default']);
+            $lang->setDefaultLan($lg['default']);
             
             $manager->persist($lang);
         }
