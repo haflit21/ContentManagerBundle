@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}{% endblock %}</title>
+        {% block stylesheets %}
+            {% stylesheets filter="cssrewrite" output="css/main.css"
+                'css/foundation.css'
+                'css/app.css'
+                'css/general_enclosed_foundicons.css'
+                'css/general_foundicons.css'
+                'css/prettify.css'
+            %}
+            <link href="{{ asset_url }}" rel="stylesheet" media="screen" />
+            {% endstylesheets %}
+        {% endblock %}
+
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+        <link href='http://fonts.googleapis.com/css?family=Open+Sans:700,400' rel='stylesheet' type='text/css'>
+    </head>
+    <body onload="prettyPrint()">
+        
+        <header>
+            <div class="gradient"></div>
+
+            <div class="menu">
+                {% include('::basemenu.html.twig') %}
+            </div>
+
+            <div class="clear"></div>
+
+<!--             <div class="slogan">
+                <div class="row">
+                    <div class="three mobile-two columns">
+                        <img src="{{ asset('/images/sf2-logo.png') }}">
+                    </div>
+                    <div class="eight mobile-two columns">
+                        <h3 class="bold">Cook your site faster with Symfony2</h3>
+                        <p>
+                            Symfony is a PHP framework for web projects.
+                        </p>
+                        <br />
+                        <p>
+                            Speed up the creation and maintenance of your PHP web applications. Replace the repetitive coding tasks by power, control and pleasure. 
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="slogan-bottom"></div> -->
+        </header>
+
+        <div class="clear"></div>
+
+        <div class="row">
+            <div class="twelve columns">
+                {% block body %}
+                {% endblock %}
+            </div>
+        </div>
+
+        <div class="clear"></div>
+
+        <!-- Footer -->
+        <footer>
+            <div class="row">
+                <div class="twelve columns">
+                    <div class="copyright">
+                        Copyright © 2012 NGclick
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- End Footer -->
+        
+        {% block javascripts %}
+            {% javascripts output='js/core.js'
+                'js/jquery.js'
+                'js/jquery.placeholder.js'
+                'js/foundation.min.js'
+                'js/app.js'
+                'js/filter.js'
+                'js/prettify.js'
+                'js/jquery-ui.min.js'
+            %}
+            <script type="text/javascript" src="{{ asset_url }}"></script>
+            {% endjavascripts %}
+        {% endblock %}
+    </body>
+</html>
