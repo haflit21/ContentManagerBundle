@@ -19,3 +19,7 @@ a.always-white, a.always-white:hover, a.always-white:visited, a.always-white.act
 .jcrop-holder{ margin-bottom: 10px; margin-top: 10px;}
 
 .cropbox{ margin-bottom: 10px; margin-top: 10px;}
+
+a:hover{
+	text-decoration: none;
+}

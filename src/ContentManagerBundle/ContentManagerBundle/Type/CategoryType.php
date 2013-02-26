@@ -13,8 +13,9 @@ class CategoryType extends AbstractType
         $builder
             ->add('title', 'text', array('label'=>'Title'))
             ->add('description', 'textarea', array(
-                'label'                  => 'Description',
-                'attr'                   => array('class'=>'ckeditor')
+                'label'     => 'Description',
+                'attr'      => array('class'=>'ckeditor'),
+                'required'   => false
             ))
         ;
     }

@@ -72,6 +72,15 @@
 							{{ form_errors(form.created) }}
 						</div>
 					</div>#}
+					<div class="control-group">
+						<div class="control-label">
+							{{ form_label(form.categories) }}
+						</div>
+						<div class="controls inline_elements">
+							{{ form_widget(form.categories, {'attr' : {'class' : 'datepicker'}}) }}
+							{{ form_errors(form.categories) }}
+						</div>
+					</div>
 					<div>
 						{{ html|raw }}
 						{% if contenttype is defined %}

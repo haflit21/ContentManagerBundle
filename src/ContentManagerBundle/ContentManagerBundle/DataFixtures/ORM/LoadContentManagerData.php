@@ -37,19 +37,19 @@ class LoadContentManagerData implements FixtureInterface
         return array(
                 array(
                     "title"     => "français",
-                    "iso"       => "fr_FR",
+                    "iso"       => "fr-FR",
                     "published" => 1,
                     "default"   => 1
                 ),
                 array(
                     "title"     => "anglais",
-                    "iso"       => "en_UK",
+                    "iso"       => "en-UK",
                     "published" => 1,
                     "default"   => 0
                 ),
                 array(
                     "title"     => "allemand",
-                    "iso"       => "de_DE",
+                    "iso"       => "de-DE",
                     "published" => 1,
                     "default"   => 0
                 )

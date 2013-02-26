@@ -82,7 +82,7 @@
 			                  			{{ content.contenttype }}
 			                  		{% endif %}
 			                  	</td>
-			                  	<td class="center-text"><img src="{{ asset('bundles/admin/img/flags/'~content.language.iso~'.png') }}" height="23px" style="height:23px;">
+			                  	<td class="center-text"><img src="{{ asset('bundles/contentmanager/img/flags/'~content.language.iso~'.png') }}" height="23px" style="height:23px;" alt="{{ content.language.iso }}">
 			                  	</td>
 			                  	<td class="center-text">
 			                  		{% for language in languages %}
@@ -94,12 +94,12 @@
 				                  		{% if found != false %}
 				                  			{% set found = found - 1 %}
 				                  			<a href="{{ path('contents_edit', { 'id' : content.taxonomy.contents[found].id }) }}" class="flag-element">
-				                  				<img src="{{ asset('bundles/admin/img/flags/'~language.iso~'.png') }}" class="flag">
-				                  				<img src="{{ asset('bundles/admin/img/flags/flag-ok.png') }}" class="flag-ok">
+				                  				<img src="{{ asset('bundles/contentmanager/img/flags/'~language.iso~'.png') }}" class="flag" alt="{{ language.iso }}">
+				                  				<img src="{{ asset('bundles/contentmanager/img/flags/flag-ok.png') }}" class="flag-ok" alt="{{ language.iso }}">
 				                  			</a>
 				                  		{% else %}
 				                  			<a href="{{ path('contents_translation', {'lang' : language.id, 'reference': content.taxonomy.id, 'contenttype': content.contenttype.id }) }}">
-				                  				<img src="{{ asset('bundles/admin/img/flags/'~language.iso~'.png') }}" class="flag">
+				                  				<img src="{{ asset('bundles/contentmanager/img/flags/'~language.iso~'.png') }}" class="flag" alt="{{ language.iso }}">
 				                  			</a>
 				                  		{% endif %}
 			                			{% set found = false %}				                  	
