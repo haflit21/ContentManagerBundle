@@ -214,14 +214,7 @@ class ContentController extends Controller
                         $field->addFieldValue($fieldvalue);
                         $em->persist($fieldvalue);
                     }
-                }
-
-                foreach ($content->getCategories() as $key => $categorie) {
-                    $content->addCategorie($categorie);
-                    $categorie->addContent($content);
-                    $em->persist($categorie);
-                }
-                
+                }                
 
 	        	$em->persist($content);
 	        	$em->flush();
