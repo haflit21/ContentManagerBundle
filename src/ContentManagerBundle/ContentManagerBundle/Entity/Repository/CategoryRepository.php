@@ -21,15 +21,19 @@ class CategoryRepository extends EntityRepository
 	               	->getResult();
 	}
 
-	function getCategoriesByLangIso($lang){
+	function getCategoriesByLangIso($lang=null){
+		if($lang==null){
+			return $this->_em
+	    			->createQueryBuilder()
+	    			->select('c')
+	       			->from('ContentManagerBundle:CMCategory', 'c');
+		}
 	    return $this->_em
 	    			->createQueryBuilder()
 	    			->select('c')
 	       			->from('ContentManagerBundle:CMCategory', 'c')
 	       			->leftjoin('c.language', 'l')
 	       			->where('l.iso = :iso')
-	         		->setParameter('iso', $lang)
-	    			->getQuery()
-	               	->getResult();
+	         		->setParameter('iso', $lang);
 	}
 }
