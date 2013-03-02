@@ -127,7 +127,12 @@ class ContentController extends Controller
         	$form->bind($request);
 	        if ($form->isValid()) {
 	        	$em = $this->getDoctrine()->getManager();
-
+	        	
+	        	/** DEBUT MODIFICATION DCA POUR ENREGISTRER A JOUR L'ARTICLE DE REFERENCE **/
+			$referenceArticle = $this->getDoctrine()->getRepository('CMSContentBundle:CMContent')->find($reference);
+		        $content->setReferenceContent($referenceArticle);
+		        /** FIN MODIFICATION DCA **/
+		        
 		        $taxonomy = $this->getDoctrine()->getRepository('ContentManagerBundle:CMContentTaxonomy')->find($reference);
 		        $taxonomy->addContent($content);
 
