@@ -46,7 +46,7 @@ class ContentType extends AbstractType
                 'query_builder' => function(CategoryRepository $er) use ($options) {
                     return $er->getCategoriesByLangIso($options['lang']);
                 },
-                'label'=>'Categories',
+                'label'=>'Categories', 
                 'property'=>'title',
                 'expanded'=>false,
                 'multiple'=>true,

@@ -181,7 +181,7 @@ class ContentController extends Controller
             
         }
 
-        $form = $this->createForm(new ContentType(), $content, array('lang'=>$content->getLanguage()->getIso()));
+        $form = $this->createForm(new ContentType(), $content, array('lang'=>$content->getLanguage()->getIso())); 
 
         if ($request->isMethod('POST')) {
         	$form->bind($request);

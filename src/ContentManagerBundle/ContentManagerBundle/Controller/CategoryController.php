@@ -29,7 +29,7 @@ class CategoryController extends Controller
         if(empty($defaultLanguage)){
             $this->get('session')->getFlashBag()->add('error', 'No default language exist. Please create one.');
             
-            return array('display'=>false);
+            return array('display'=>false); 
         }
         
         $languages = $this->getLanguages();

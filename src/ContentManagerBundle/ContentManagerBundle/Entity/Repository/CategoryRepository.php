@@ -28,6 +28,6 @@ class CategoryRepository extends EntityRepository
 	       			->from('ContentManagerBundle:CMCategory', 'c')
 	       			->leftjoin('c.language', 'l')
 	       			->where('l.iso = :iso')
-	         		->setParameter('iso', $lang);
+	         		->setParameter('iso', $lang); 
 	}
 }
