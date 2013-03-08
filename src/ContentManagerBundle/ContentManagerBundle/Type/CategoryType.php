@@ -17,6 +17,12 @@ class CategoryType extends AbstractType
                 'attr'      => array('class'=>'ckeditor'),
                 'required'   => false
             ))
+            ->add('published', 'choice', array(
+                'choices'=> array('1'=>'Oui', '0'=>'Non'), 
+                'expanded'=>true, 
+                'multiple'=>false,
+                'label'=>'Published'
+            ))
         ;
     }
 

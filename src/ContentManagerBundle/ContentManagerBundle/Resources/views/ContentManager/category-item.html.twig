@@ -26,10 +26,13 @@
              <a href="{{ path('categories') }}" class="btn btn-small pull-right"><i class="icon icon-chevron-left"></i> Retour</a>
              <div class="clear h20"></div>
 
-            {% if category.id != 0 %}
+            
+            {% if referenceCategory is defined %}
+                <form class="form-horizontal" action="{{path('categories_translation', {'lang' : lang, 'reference' : referenceCategory})}}" method="post" {{ form_enctype(form) }}>
+            {% elseif category.id != 0 %}
                 <form class="form-horizontal" action="{{path('categories_edit', {'id' : category.id })}}" method="post" {{ form_enctype(form) }}>
             {% else %}
-                <form class="form-horizontal" action="{{path('categories_new')}}" method="post" {{ form_enctype(form) }}>
+                <form class="form-horizontal" action="{{path('categories_new', {'lang' : lang })}}" method="post" {{ form_enctype(form) }}>
             {% endif %} 
                 <div class="well span8">
                     {{ form_errors(form) }}
@@ -50,6 +53,15 @@
                         <div class="controls">
                             {{ form_widget(form.description) }}
                             {{ form_errors(form.description) }}
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <div class="control-label">
+                            {{ form_label(form.published) }}
+                        </div>
+                        <div class="controls inline_elements">
+                            {{ form_widget(form.published) }}
+                            {{ form_errors(form.published) }}
                         </div>
                     </div>
                     <div class="form-actions">

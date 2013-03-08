@@ -22,7 +22,7 @@
 	                </tr>
 	            </thead>
 	        </table>
-			<a href="{{ path('categories_new') }}" class="btn btn-primary btn-small pull-right"><i class="icon icon-plus-sign icon-white"></i> New</a>
+			<a href="{{ path('categories_new', {'lang' : defaultLanguage.id }) }}" class="btn btn-primary btn-small pull-right"><i class="icon icon-plus-sign icon-white"></i> New</a>
 
 		    <div class="clear h20"></div>
 
@@ -32,19 +32,121 @@
 		                <th class="center-text">#</th>
 			            <th class="center-text">Title</th>
 			            <th class="center-text">Description</th>
+	                  	<th class="center-text">Language</th>
+	                  	<th class="center-text">Translations</th>
+		                <th class="center-text">Published</th>
 			            <th class="center-text">Actions</th>
+			            <th class="center-text">Contents</th>
 			        </tr>
 			    </thead>
 			    <tbody>
 			    {% for category in categories %}
+			        {% set found = false %}
 			        <tr>
 			            <td class="center-text">{{ category.id }}</td>
 			            <td class="center-text"><a href="{{ path('categories_edit', { 'id': category.id }) }}">{{ category.title }}</a></td>
 			            <td class="center-text">{{ category.description }}</td>
+	                  	<td class="center-text"><img src="{{ asset('bundles/contentmanager/img/flags/'~category.language.iso~'.png') }}" height="23px" style="height:23px;" alt="{{ category.language.iso }}">
+	                  	</td>
+	                  	<td class="center-text">
+	                  		{% for language in languages %}
+	                  			{% for translation in category.taxonomy.categories %}
+	                  				{% if language.id == translation.language.id %}
+	                  					{% set found = loop.index %}
+	                  				{% endif %}
+	                  			{% endfor %}
+		                  		{% if found != false %}
+		                  			{% set found = found - 1 %}
+		                  			<a href="{{ path('categories_edit', { 'id' : category.taxonomy.categories[found].id }) }}" class="flag-element">
+		                  				<img src="{{ asset('bundles/contentmanager/img/flags/'~language.iso~'.png') }}" class="flag" alt="{{ language.iso }}">
+		                  				<img src="{{ asset('bundles/contentmanager/img/flags/flag-ok.png') }}" class="flag-ok" alt="{{ language.iso }}">
+		                  			</a>
+		                  		{% else %}
+		                  			<a href="{{ path('categories_translation', {'lang' : language.id, 'reference': category.taxonomy.id}) }}">
+		                  				<img src="{{ asset('bundles/contentmanager/img/flags/'~language.iso~'.png') }}" class="flag" alt="{{ language.iso }}">
+		                  			</a>
+		                  		{% endif %}
+	                			{% set found = false %}				                  	
+	                  		{% endfor %}
+	                  	</td>
+	                  	<td class="center-text">
+	                  		<a href="{{ path('categories_published', {'id' : category.id }) }}">
+			                  	{% if category.published %}
+			                  		<i class="icon-ok"></i>
+			                  	{% else %}
+			                  		<i class="icon-ban-circle"></i>
+			                  	{% endif %}
+		                  	</a>
+		                </td>
 			            <td class="center-text">
 			                <a href="{{ path('categories_edit', { 'id': category.id }) }}"><i class="icon-pencil"></i></a>
-
-			                <a class="space-left" href="{{ path('categories_delete', { 'id': category.id }) }}"><i class="icon-trash"></i></a>
+			                <a href="{{ path('categories_delete', { 'id': category.id }) }}"><i class="icon-trash"></i></a>
+			                <a href="#manageTranslation" role="button" data-toggle="modal"><i class="icon-globe"></i></a>
+	                  		<div class="modal hide fade" id="manageTranslation" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		                  		<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+									<h3 id="myModalLabel">Manage Translations</h3>
+								</div>
+								<div class="modal-body">			                  	
+									<table class="table table-striped table-bordered">
+					      				<thead>
+							                <tr>
+							                  	<th class="center-text">#</th>
+							                  	<th>Title</th>
+							                  	<th class="center-text">Type</th>
+							                  	<th class="center-text">Published</th>
+							                  	<th class="center-text">Action</th>
+							                </tr>
+							            </thead>
+							            <tbody>
+											{% for language in languages %}
+									  			{% for translation in category.taxonomy.categories %}
+									  				{% if language.id == translation.language.id %}
+									  					{% set found = loop.index %}
+									  				{% endif %}
+									  			{% endfor %}
+									      		{% if found != false %}
+									      			{% set found = found - 1 %}
+									      				<tr>
+										                	<td class="center-text">
+										                  		{{ loop.index }}
+										                	</td>
+									                  		<td>
+									                  			<a href="{{ path('categories_edit', {'id' : category.taxonomy.categories[found].id }) }}">
+									                  				{{ category.taxonomy.categories[found].title }}
+									                  			</a>
+									                  		</td>
+									                  		<td class="center-text">
+									                  			{% if category.taxonomy.contents[found].taxonomy is defined %}
+									                  				{% for taxonomy in category.taxonomy.categories[found].taxonomy %}
+									                  					{{ taxonomy.title }}
+									                  				{% endfor %}
+									                  			{% endif %}
+									                  		</td>
+									                  		<td class="center-text">
+										                  		<a href="{{ path('contents_published', {'id' : category.taxonomy.categories[found].id }) }}">
+												                  	{% if category.taxonomy.categories[found].published %}
+												                  		<i class="icon-ok"></i>
+												                  	{% else %}
+												                  		<i class="icon-ban-circle"></i>
+												                  	{% endif %}
+											                  	</a>
+											                </td>
+										                  	<td class="center-text">
+										                  		<a href="{{ path('categories_edit', {'id' : category.taxonomy.categories[found].id }) }}"><i class="icon-pencil"></i></a>
+										                  		<a href="{{ path('categories_delete', {'id' : category.taxonomy.categories[found].id }) }}"><i class="icon-trash"></i></a>
+										                  	</td>
+										                </tr>
+								      			{% endif %}
+												{% set found = false %}				                  	
+							  				{% endfor %}
+								  		</tbody>
+								    </table>
+								</div>
+							</div>
+			            </td>
+			            <td class="center-text">
+			            	<a href="{{ path('contents') }}">{{ category.contents|length }}</a>
 			            </td>
 			        </tr>
 			    {% endfor %}
