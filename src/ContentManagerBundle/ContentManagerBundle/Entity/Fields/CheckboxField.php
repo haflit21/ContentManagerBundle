@@ -87,7 +87,7 @@ class CheckboxField extends Fields
     // faire une classe avec les display des differents types: checkbox, select, input etc.
     public function getOptions(){
     	$options = '
-    		<label for="options">Options</label>
+    		<label for="options" title="Use the synthax value::label%% value::label%% value::label">Options</label>
     		<textarea id="options" name="options[options]" >'.$this->getParamsValue($this->params, 'options').'</textarea>
     		<label for="required">Required</label>
     		<select id="required" name="options[required]" >

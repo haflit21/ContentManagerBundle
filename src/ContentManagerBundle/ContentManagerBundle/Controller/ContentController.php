@@ -258,16 +258,18 @@ class ContentController extends Controller
     }
 
     private function getMetas($content){
-    	if(!$content->getMetatitle()){
+        $metas = $content->getMetas();
+    	if(!$metas->getMetatitle()){
     		$title = $content->getTitle();
-    		$content->setMetatitle($title);
+    		$metas->setMetatitle($title);
     	}
-    	if(!$content->getMetadescription()){
-    		$content->getMetadescription(" ");
+    	if(!$metas->getMetadescription()){
+    		$metas->setMetadescription(" ");
     	}
-    	if(!$content->getCanonical()){
-    		$content->getCanonical(" ");
+    	if(!$metas->getCanonical()){
+    		$metas->setCanonical(" ");
     	}
+        $content->setMetas($metas);
 
     	return $content;
     }

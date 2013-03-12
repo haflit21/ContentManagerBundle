@@ -52,9 +52,7 @@ class ContentType extends AbstractType
                 'multiple'=>true,
                 'required'=>true
             ))
-            ->add('metatitle', 'text', array('label'=>'MetaTitle', 'required'=>false))
-            ->add('metadescription', 'text', array('label'=>'MetaDescription', 'required'=>false))
-            ->add('canonical', 'text', array('label'=>'Canonical', 'required'=>false))
+            ->add('metas', new MetasType)
         ;
     }
 

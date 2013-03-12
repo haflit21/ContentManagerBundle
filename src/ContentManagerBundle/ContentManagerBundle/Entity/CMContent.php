@@ -68,30 +68,15 @@ class CMContent
     private $published;
 
     /**
-     * @var string $metatitle
-     *
-     * @ORM\Column(name="metatitle", type="string", length=255)
-     */
-    private $metatitle;
-
-    /**
-     * @var text $metadescription
-     *
-     * @ORM\Column(name="metadescription", type="text", nullable=true)
-     */
-    private $metadescription;
-
-    /**
-     * @var string $canonical
-     *
-     * @ORM\Column(name="canonical", type="string", length=255, nullable=true)
-     */
-    private $canonical;
-
-    /**
      * @ORM\OneToMany(targetEntity="CMContent", mappedBy="referenceContent")
      */
     private $translations;
+
+    /**
+     * @ORM\OneToOne(targetEntity="CMMetas")
+     * @ORM\JoinColumn(name="meta_id")
+     */
+    private $metas;
 
     /**
      * @ORM\ManyToOne(targetEntity="CMContent", inversedBy="translations")
@@ -480,5 +465,28 @@ class CMContent
     public function getContenttype()
     {
         return $this->contenttype;
+    }
+
+    /**
+     * Set metas
+     *
+     * @param \ContentManagerBundle\ContentManagerBundle\Entity\CMMetas $metas
+     * @return CMContent
+     */
+    public function setMetas(\ContentManagerBundle\ContentManagerBundle\Entity\CMMetas $metas = null)
+    {
+        $this->metas = $metas;
+    
+        return $this;
+    }
+
+    /**
+     * Get metas
+     *
+     * @return \ContentManagerBundle\ContentManagerBundle\Entity\CMMetas 
+     */
+    public function getMetas()
+    {
+        return $this->metas;
     }
 }
