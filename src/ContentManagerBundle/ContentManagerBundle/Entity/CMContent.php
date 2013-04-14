@@ -103,12 +103,12 @@ class CMContent
         $this->translations = new \Doctrine\Common\Collections\ArrayCollection();
         $this->fieldvalues = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -124,14 +124,14 @@ class CMContent
     public function setTitle($title)
     {
         $this->title = $title;
-    
+
         return $this;
     }
 
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -147,14 +147,14 @@ class CMContent
     public function setDescription($description)
     {
         $this->description = $description;
-    
+
         return $this;
     }
 
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -170,14 +170,14 @@ class CMContent
     public function setCreated($created)
     {
         $this->created = $created;
-    
+
         return $this;
     }
 
     /**
      * Get created
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreated()
     {
@@ -193,14 +193,14 @@ class CMContent
     public function setPublished($published)
     {
         $this->published = $published;
-    
+
         return $this;
     }
 
     /**
      * Get published
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getPublished()
     {
@@ -216,14 +216,14 @@ class CMContent
     public function setMetatitle($metatitle)
     {
         $this->metatitle = $metatitle;
-    
+
         return $this;
     }
 
     /**
      * Get metatitle
      *
-     * @return string 
+     * @return string
      */
     public function getMetatitle()
     {
@@ -239,14 +239,14 @@ class CMContent
     public function setMetadescription($metadescription)
     {
         $this->metadescription = $metadescription;
-    
+
         return $this;
     }
 
     /**
      * Get metadescription
      *
-     * @return string 
+     * @return string
      */
     public function getMetadescription()
     {
@@ -262,14 +262,14 @@ class CMContent
     public function setCanonical($canonical)
     {
         $this->canonical = $canonical;
-    
+
         return $this;
     }
 
     /**
      * Get canonical
      *
-     * @return string 
+     * @return string
      */
     public function getCanonical()
     {
@@ -285,14 +285,14 @@ class CMContent
     public function setLanguage(\ContentManagerBundle\ContentManagerBundle\Entity\CMLanguage $language = null)
     {
         $this->language = $language;
-    
+
         return $this;
     }
 
     /**
      * Get language
      *
-     * @return \ContentManagerBundle\ContentManagerBundle\Entity\CMLanguage 
+     * @return \ContentManagerBundle\ContentManagerBundle\Entity\CMLanguage
      */
     public function getLanguage()
     {
@@ -308,14 +308,14 @@ class CMContent
     public function setTaxonomy(\ContentManagerBundle\ContentManagerBundle\Entity\CMContentTaxonomy $taxonomy = null)
     {
         $this->taxonomy = $taxonomy;
-    
+
         return $this;
     }
 
     /**
      * Get taxonomy
      *
-     * @return \ContentManagerBundle\ContentManagerBundle\Entity\CMContentTaxonomy 
+     * @return \ContentManagerBundle\ContentManagerBundle\Entity\CMContentTaxonomy
      */
     public function getTaxonomy()
     {
@@ -331,7 +331,7 @@ class CMContent
     public function addCategorie(\ContentManagerBundle\ContentManagerBundle\Entity\CMCategory $categories)
     {
         $this->categories[] = $categories;
-    
+
         return $this;
     }
 
@@ -348,7 +348,7 @@ class CMContent
     /**
      * Get categories
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getCategories()
     {
@@ -364,7 +364,7 @@ class CMContent
     public function addTranslation(\ContentManagerBundle\ContentManagerBundle\Entity\CMContent $translations)
     {
         $this->translations[] = $translations;
-    
+
         return $this;
     }
 
@@ -381,7 +381,7 @@ class CMContent
     /**
      * Get translations
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getTranslations()
     {
@@ -397,14 +397,14 @@ class CMContent
     public function setReferenceContent(\ContentManagerBundle\ContentManagerBundle\Entity\CMContent $referenceContent = null)
     {
         $this->referenceContent = $referenceContent;
-    
+
         return $this;
     }
 
     /**
      * Get referenceContent
      *
-     * @return \ContentManagerBundle\ContentManagerBundle\Entity\CMContent 
+     * @return \ContentManagerBundle\ContentManagerBundle\Entity\CMContent
      */
     public function getReferenceContent()
     {
@@ -420,7 +420,7 @@ class CMContent
     public function addFieldvalue(\ContentManagerBundle\ContentManagerBundle\Entity\CMFieldValue $fieldvalues)
     {
         $this->fieldvalues[] = $fieldvalues;
-    
+
         return $this;
     }
 
@@ -437,7 +437,7 @@ class CMContent
     /**
      * Get fieldvalues
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getFieldvalues()
     {
@@ -453,14 +453,14 @@ class CMContent
     public function setContenttype(\ContentManagerBundle\ContentManagerBundle\Entity\CMContentType $contenttype = null)
     {
         $this->contenttype = $contenttype;
-    
+
         return $this;
     }
 
     /**
      * Get contenttype
      *
-     * @return \ContentManagerBundle\ContentManagerBundle\Entity\CMContentType 
+     * @return \ContentManagerBundle\ContentManagerBundle\Entity\CMContentType
      */
     public function getContenttype()
     {
@@ -476,14 +476,14 @@ class CMContent
     public function setMetas(\ContentManagerBundle\ContentManagerBundle\Entity\CMMetas $metas = null)
     {
         $this->metas = $metas;
-    
+
         return $this;
     }
 
     /**
      * Get metas
      *
-     * @return \ContentManagerBundle\ContentManagerBundle\Entity\CMMetas 
+     * @return \ContentManagerBundle\ContentManagerBundle\Entity\CMMetas
      */
     public function getMetas()
     {

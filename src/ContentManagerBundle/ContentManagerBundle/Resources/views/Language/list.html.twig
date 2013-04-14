@@ -7,14 +7,14 @@
 			{% for flashMessage in app.session.flashbag.get('info') %}
 			    <div class="alert alert-info">
 			    	<button class="close" data-dismiss="alert" type="button">×</button>
-			        <strong>Notice</strong> 
+			        <strong>Notice</strong>
 			        {{ flashMessage }}
 			    </div>
 			{% endfor %}
 			{% for flashMessage in app.session.flashbag.get('error') %}
 			    <div class="alert alert-error">
 			    	<button class="close" data-dismiss="alert" type="button">×</button>
-			        <strong>Error</strong> 
+			        <strong>Error</strong>
 			        {{ flashMessage }}
 			    </div>
 			{% endfor %}
@@ -30,7 +30,7 @@
 	                </tr>
 	            </thead>
 	        </table>
-			<a href="{{ path('languages_new') }}" class="btn btn-primary btn-small pull-right"><i class="icon icon-plus-sign icon-white"></i> New</a>
+			<a href="{{ path('language_new') }}" class="btn btn-primary btn-small pull-right"><i class="icon icon-plus-sign icon-white"></i> New</a>
 
 		    <div class="clear h20"></div>
 
@@ -52,7 +52,7 @@
 			                  	{{ loop.index }}
 			                </td>
 		                  	<td>
-		                  		<a href="{{ path('languages_edit', {'id' : language.id }) }}">
+		                  		<a href="{{ path('language_edit', {'id' : language.id }) }}">
 		                  			{{ language.title }}
 		                  		</a>
 		                  	</td>
@@ -60,7 +60,7 @@
 		                  		{{ language.iso }}
 		                  	</td>
 		                  	<td class="center-text">
-		                  		<a href="{{ path('languages_published', {'id' : language.id }) }}">
+		                  		<a href="{{ path('language_publish', {'id' : language.id }) }}">
 				                  	{% if language.published %}
 				                  		<i class="icon-ok"></i>
 				                  	{% else %}
@@ -69,7 +69,7 @@
 			                  	</a>
 			                </td>
 		                  	<td class="center-text">
-		                  		<a href="{{ path('languages_default', {'id' : language.id }) }}">
+		                  		<a href="{{ path('language_default', {'id' : language.id }) }}">
 			                  		{% if language.defaultLan %}
 			                  			<i class="icon-ok"></i>
 			                  		{% else %}
@@ -78,12 +78,12 @@
 			                  	</a>
 		                  	</td>
 		                  	<td class="center-text">
-		                  		<a href="{{ path('languages_edit', {'id' : language.id }) }}"><i class="icon-pencil"></i></a>
-		                  		<a href="{{ path('languages_copy', {'id' : language.id }) }}"><i class="icon-file"></i></a>
-		                  		<a href="{{ path('languages_delete', {'id' : language.id }) }}"><i class="icon-trash"></i></a>
+		                  		<a href="{{ path('language_edit', {'id' : language.id }) }}"><i class="icon-pencil"></i></a>
+		                  		<a href="{{ path('language_copy', {'id' : language.id }) }}"><i class="icon-file"></i></a>
+		                  		<a href="{{ path('language_delete', {'id' : language.id }) }}"><i class="icon-trash"></i></a>
 		                  	</td>
-		                </tr>					
-					{% endfor %} 
+		                </tr>
+					{% endfor %}
 	            </tbody>
 	        </table>
 	    </div>

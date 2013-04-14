@@ -67,7 +67,7 @@ class CMLanguage
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -83,14 +83,14 @@ class CMLanguage
     public function setTitle($title)
     {
         $this->title = $title;
-    
+
         return $this;
     }
 
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -106,14 +106,14 @@ class CMLanguage
     public function setIso($iso)
     {
         $this->iso = $iso;
-    
+
         return $this;
     }
 
     /**
      * Get iso
      *
-     * @return string 
+     * @return string
      */
     public function getIso()
     {
@@ -129,14 +129,14 @@ class CMLanguage
     public function setPublished($published)
     {
         $this->published = $published;
-    
+
         return $this;
     }
 
     /**
      * Get published
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getPublished()
     {
@@ -152,14 +152,14 @@ class CMLanguage
     public function setDefaultLan($defaultLan)
     {
         $this->default_lan = $defaultLan;
-    
+
         return $this;
     }
 
     /**
      * Get default_lan
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getDefaultLan()
     {
@@ -175,7 +175,7 @@ class CMLanguage
     public function addCategorie(\ContentManagerBundle\ContentManagerBundle\Entity\CMCategory $categories)
     {
         $this->categories[] = $categories;
-    
+
         return $this;
     }
 
@@ -192,7 +192,7 @@ class CMLanguage
     /**
      * Get categories
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getCategories()
     {
@@ -208,7 +208,7 @@ class CMLanguage
     public function addContent(\ContentManagerBundle\ContentManagerBundle\Entity\CMContent $contents)
     {
         $this->contents[] = $contents;
-    
+
         return $this;
     }
 
@@ -225,7 +225,7 @@ class CMLanguage
     /**
      * Get contents
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getContents()
     {

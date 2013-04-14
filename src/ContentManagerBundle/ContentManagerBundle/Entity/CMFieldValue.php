@@ -46,10 +46,10 @@ class CMFieldValue
      * @ORM\PreUpdate
      */
     public function serializeFieldValue()
-    {        
+    {
         $this->value = serialize($this->value);
     }
-    
+
     /**
      * Constructor
      */
@@ -67,14 +67,14 @@ class CMFieldValue
     public function setValue($value)
     {
         $this->value = $value;
-    
+
         return $this;
     }
 
     /**
      * Get value
      *
-     * @return string 
+     * @return string
      */
     public function getValue()
     {
@@ -90,14 +90,14 @@ class CMFieldValue
     public function setContent(\ContentManagerBundle\ContentManagerBundle\Entity\CMContent $content)
     {
         $this->content = $content;
-    
+
         return $this;
     }
 
     /**
      * Get content
      *
-     * @return \ContentManagerBundle\ContentManagerBundle\Entity\CMContent 
+     * @return \ContentManagerBundle\ContentManagerBundle\Entity\CMContent
      */
     public function getContent()
     {
@@ -113,14 +113,14 @@ class CMFieldValue
     public function setField(\ContentManagerBundle\ContentManagerBundle\Entity\CMField $field)
     {
         $this->field = $field;
-    
+
         return $this;
     }
 
     /**
      * Get field
      *
-     * @return \ContentManagerBundle\ContentManagerBundle\Entity\CMField 
+     * @return \ContentManagerBundle\ContentManagerBundle\Entity\CMField
      */
     public function getField()
     {

@@ -15,49 +15,53 @@ use ContentManagerBundle\ContentManagerBundle\Type\ContentType;
 use ContentManagerBundle\ContentManagerBundle\Classes\ExtraFields;
 
 /**
+ * class ContentController
+ *
  * @Route("/contentmanager")
  */
-class ContentController extends Controller
+class ContentController extends DefaultController
 {
      /**
-     * @Route("/contents/list", name="contents")
-     * @Template("ContentManagerBundle:ContentManager:contents-list.html.twig")
+     * List Contents
+     *
+     * @Route("/contents", name="contents")
+     * @Template("ContentManagerBundle:Content:list.html.twig")
+     *
+     * @return array
      */
     public function listAction()
     {
-    	$defaultLanguage = $this->getLanguageDefault();
+        $defaultLanguage = $this->getLanguageDefault();
 
-        if(empty($defaultLanguage)){
-            $this->get('session')->getFlashBag()->add('error', 'No default language exist. Please create one.');
-            
+        if (empty($defaultLanguage)) {
+            $this->addFlashMsg('error', 'No default language exist. Please create one.');
+
             return array('display'=>false);
         }
-        
-    	$languages = $this->getLanguages();
+
+        $languages   = $this->getLanguages();
         $contentType = $this->generateListTypeField();
-        $contents = $this->getDoctrine()->getRepository('ContentManagerBundle:CMContent')->getContentByLangId($defaultLanguage->getId());
+        $contents    = $this->getRepository('ContentManagerBundle:CMContent')->getContentByLangId($defaultLanguage->getId());
 
-        $request = $this->getRequest();
-        $locale = $request->getLocale();
+        $locale      = $this->getLocale();
 
-        return array('contents'=>$contents, 'defaultLanguage'=>$defaultLanguage, 'languages'=>$languages, 'display'=>true, 'contentType'=>$contentType);
+        return array(
+            'contents'        =>$contents,
+            'defaultLanguage' =>$defaultLanguage,
+            'languages'       =>$languages,
+            'display'         =>true,
+            'contentType'     =>$contentType
+        );
     }
 
-    private function getLanguageDefault(){
-    	$language = $this->getDoctrine()->getRepository('ContentManagerBundle:CMLanguage')->findBy(array('default_lan'=>'1'));
-    	$language = current($language);
-
-        return $language;
-    }
-
-    private function getLanguages(){
-    	$languages = $this->getDoctrine()->getRepository('ContentManagerBundle:CMLanguage')->findBy(array('default_lan'=>'0', 'published'=>'1'));
-
-        return $languages;
-    }
-
-    private function generateListTypeField(){
-        $contentTypes = $this->getDoctrine()->getRepository('ContentManagerBundle:CMContentType')->findAll();
+    /**
+     * Generate the list of content type
+     *
+     * @return string $html
+     */
+    private function generateListTypeField()
+    {
+        $contentTypes = $this->getRepository('ContentManagerBundle:CMContentType')->findAll();
 
         $html = '<select name="contentType" id="contentType">';
         foreach ($contentTypes as $key => $type) {
@@ -68,148 +72,179 @@ class ContentController extends Controller
         return $html;
     }
 
-	/**
-     * @Route("/contents/new/{lang}", name="contents_new")
-     * @Template("ContentManagerBundle:ContentManager:contents-item.html.twig")
+    /**
+     * Create Content
+     *
+     * @param Request   $request
+     * @param int       $lang
+     *
+     * @Route("/content/new/{lang}", name="content_new")
+     * @Template("ContentManagerBundle:Content:item.html.twig")
+     *
+     * @return array
      */
     public function newItemAction(Request $request, $lang)
     {
-        $content = new CMContent;
-        $language = $this->getDoctrine()->getRepository('ContentManagerBundle:CMLanguage')->find($lang);
+        $content  = new CMContent;
+        $language = $this->getRepository('ContentManagerBundle:CMLanguage')->find($lang);
+
         $content->setLanguage($language);
-        $form = $this->createForm(new ContentType(), $content, array('lang'=>$language->getIso()));
+
+        $form        = $this->createForm(new ContentType(), $content, array('lang'=>$language->getIso()));
         $contenttype = $request->query->get('contentType');
-        $html = ExtraFields::loadFields($this, $contenttype);
+        $html        = ExtraFields::loadFields($this, $contenttype);
+
         if ($request->isMethod('POST')) {
-        	$form->bind($request);
-	        if ($form->isValid()) {
-	        	$em = $this->getDoctrine()->getManager();
+            $form->bind($request);
+            if ($form->isValid()) {
+                $created = $this->getDateTimeObject($content->getCreated());
+                $content->setCreated($created);
 
-	        	$created = $this->getDateTimeObject($content->getCreated());
-	        	$content->setCreated($created);
-
-	        	$content = $this->getMetas($content);
+                $content = $this->getMetas($content);
 
                 $contentTaxonomy = new CMContentTaxonomy;
                 $contentTaxonomy->addContent($content);
-	        	$em->persist($contentTaxonomy);
-	        	$em->flush();
+                $this->persistAndFlush($contentTaxonomy);
 
                 $content->setTaxonomy($contentTaxonomy);
-                $em->persist($content);
-                $em->flush();
+                $this->persistAndFlush($content);
 
                 $contenttype = $request->get('contenttype');
+                /*
+                 * ContentManagerBundle\ContentManagerBundle\Classes\ExtraFields
+                 * saveFields : used to save all fields add to a content type
+                 */
                 ExtraFields::saveFields($this, $em, $request, $content, $contenttype);
-                $em->persist($content);
-                $em->flush();
+                $this->persistAndFlush($content);
 
-	            return $this->redirect($this->generateUrl('contents'));
-	        }
-	    }
+                return $this->redirect($this->generateUrl('contents'));
+            }
+        }
 
-        return array('form' => $form->createView(),'content' => $content, 'lang' => $lang, 'html' => $html, 'contenttype' => $contenttype); 
+        return array(
+            'form'        => $form->createView(),
+            'content'     => $content,
+            'lang'        => $lang,
+            'html'        => $html,
+            'contenttype' => $contenttype
+        );
     }
 
-    /**
-     * @Route("/contents/translation/{reference}/{lang}/{contenttype}", name="contents_translation")
-     * @Template("ContentManagerBundle:ContentManager:contents-item.html.twig")
+     /**
+     * Create Content Translation
+     *
+     * @param Request   $request
+     * @param int       $reference
+     * @param int       $lang
+     * @param int       $contenttype
+     *
+     * @Route("/content/translation/{reference}/{lang}/{contenttype}", name="content_translation")
+     * @Template("ContentManagerBundle:Content:item.html.twig")
+     *
+     * @return array
      */
     public function newItemTranslationAction(Request $request, $reference, $lang, $contenttype)
     {
-        $content = new CMContent;
-        $language = $this->getDoctrine()->getRepository('ContentManagerBundle:CMLanguage')->find($lang);
+        $content  = new CMContent;
+        $language = $this->getRepository('ContentManagerBundle:CMLanguage')->find($lang);
+
         $content->setLanguage($language);
         $form = $this->createForm(new ContentType(), $content, array('lang'=>$language->getIso()));
         $html = ExtraFields::loadFields($this, $contenttype);
 
         if ($request->isMethod('POST')) {
-        	$form->bind($request);
-	        if ($form->isValid()) {
-	        	$em = $this->getDoctrine()->getManager();
-	        	
-	        	/** DEBUT MODIFICATION DCA POUR ENREGISTRER A JOUR L'ARTICLE DE REFERENCE **/
-			$referenceArticle = $this->getDoctrine()->getRepository('CMSContentBundle:CMContent')->find($reference);
-		        $content->setReferenceContent($referenceArticle);
-		        /** FIN MODIFICATION DCA **/
-		        
-		        $taxonomy = $this->getDoctrine()->getRepository('ContentManagerBundle:CMContentTaxonomy')->find($reference);
-		        $taxonomy->addContent($content);
+            $form->bind($request);
+            if ($form->isValid()) {
+                $referenceArticle = $this->getRepository('CMSContentBundle:CMContent')->find($reference);
+                $content->setReferenceContent($referenceArticle);
 
-		        $content->setTaxonomy($taxonomy);
+                $taxonomy = $this->getRepository('ContentManagerBundle:CMContentTaxonomy')->find($reference);
+                $taxonomy->addContent($content);
 
-	        	$created = $this->getDateTimeObject($content->getCreated());
-	        	$content->setCreated($created);
+                $content->setTaxonomy($taxonomy);
 
-	        	$content = $this->getMetas($content);
-                $em->persist($content);
-                $em->flush();
+                $created = $this->getDateTimeObject($content->getCreated());
+                $content->setCreated($created);
 
-	        	$em->persist($taxonomy);
+                $content = $this->getMetas($content);
+                $this->persistAndFlush($content);
+
+                $this->persistAndFlush($taxonomy);
                 $contenttype = $request->request->get('contenttype');
                 ExtraFields::saveFields($this, $em, $request, $content, $contenttype);
-	        	$em->persist($content);
-	        	$em->flush();
+                $this->persistAndFlush($content);
 
-	            return $this->redirect($this->generateUrl('contents'));
-	        }
-	    }
+                return $this->redirect($this->generateUrl('contents'));
+            }
+        }
 
-        return array('form' => $form->createView(),'content' => $content, 'lang' => $lang, 'referenceContent'=>$reference, 'html' => $html, 'contenttype' => $contenttype); 
+        return array(
+            'form'             => $form->createView(),
+            'content'          => $content,
+            'lang'             => $lang,
+            'referenceContent' =>$reference,
+            'html'             => $html,
+            'contenttype'      => $contenttype
+        );
     }
 
     /**
-     * @Route("/contents/edit/{id}", name="contents_edit")
-     * @Template("ContentManagerBundle:ContentManager:contents-item.html.twig")
+     * Edit Content
+     *
+     * @param Request   $request
+     * @param int       $id
+     *
+     * @Route("/content/edit/{id}", name="content_edit")
+     * @Template("ContentManagerBundle:Content:item.html.twig")
+     *
+     * @return array
      */
     public function editItemAction(Request $request, $id)
     {
-        $content = $this->getDoctrine()->getRepository('ContentManagerBundle:CMContent')->find($id);
+        $content = $this->getRepository('ContentManagerBundle:CMContent')->find($id);
         $content = $this->getStringDate($content);
-        $html = '';
+        $html    = '';
 
         foreach ($content->getContentType()->getFields() as $key1 => $field) {
-            $display_elem=null;
+            $displayElem = null;
             foreach ($content->getFieldValues() as $key2 => $value) {
-                if($field->getPublished()){
-                    if($field->getId() == $value->getField()->getId() && $content->getId() == $value->getContent()->getId()){
+                if ($field->getPublished()) {
+                    if ($field->getId() == $value->getField()->getId() && $content->getId() == $value->getContent()->getId()) {
                         $html .= $field->getField()->displayfield($field,$value->getValue());
-                        $display_elem=1;
+                        $displayElem = 1;
                     }
                 }
             }
-            if(!$display_elem){
-                if($field->getPublished()){
+
+            if (!$displayElem) {
+                if ($field->getPublished()) {
                     $html .= $field->getField()->displayfield($field);
                 }
             }
-            
+
         }
 
-        $form = $this->createForm(new ContentType(), $content, array('lang'=>$content->getLanguage()->getIso())); 
+        $form = $this->createForm(new ContentType(), $content, array('lang'=>$content->getLanguage()->getIso()));
 
         if ($request->isMethod('POST')) {
-        	$form->bind($request);
-	        if ($form->isValid()) {
-	        	$em = $this->getDoctrine()->getManager();
-
-	        	$created = $this->getDateTimeObject($content->getCreated());
-	        	$content->setCreated($created);
-	        	$content = $this->getMetas($content);
+            $form->bind($request);
+            if ($form->isValid()) {
+                $created = $this->getDateTimeObject($content->getCreated());
+                $content->setCreated($created);
+                $content = $this->getMetas($content);
 
                 $type = $content->getContentType();
                 foreach ($type->getFields() as $key => $field) {
-                    $additem=null;
+                    $addItem = null;
                     foreach ($content->getFieldValues() as $key => $fieldvalue) {
-                        if($fieldvalue->getField()->getId() == $field->getId())
-                        {
+                        if ($fieldvalue->getField()->getId() == $field->getId()) {
                             $value = $request->request->get($field->getName());
                             $fieldvalue->setValue($value);
-                            $em->persist($fieldvalue);
-                            $additem=1;
+                            $this->persist($fieldvalue);
+                            $addItem = 1;
                         }
                     }
-                    if(!$additem){
+                    if(!$addItem){
                         $value = $request->request->get($field->getName());
                         $fieldvalue = new CMFieldValue;
                         $fieldvalue->setValue($value);
@@ -217,126 +252,173 @@ class ContentController extends Controller
                         $fieldvalue->setField($field);
                         $content->addFieldValue($fieldvalue);
                         $field->addFieldValue($fieldvalue);
-                        $em->persist($fieldvalue);
+                        $this->persist($fieldvalue);
                     }
-                }                
+                }
 
-	        	$em->persist($content);
-	        	$em->flush();
+                $this->persistAndFlush($content);
 
-	            return $this->redirect($this->generateUrl('contents'));
-	        }
-	    }
+                return $this->redirect($this->generateUrl('contents'));
+            }
+        }
 
-        return array('form' => $form->createView(),'content' => $content, 'html'=>$html); 
+        return array(
+            'form' => $form->createView(),
+            'content' => $content,
+            'html'=>$html
+        );
     }
 
+    /**
+     * Get DateTime Object
+     *
+     * @param string        $date
+     *
+     * @return \DateTime    $date
+     */
     private function getDateTimeObject($date){
-    	//input format : M/d/Y
-    	$date = explode('-', $date);
-    	if(is_array($date) && count($date)==3){
-    		$year = $date[0];
-	    	$month = $date[1];
-	    	$day = $date[2];
+        //input format : M/d/Y
 
-	    	$date = new \DateTime();
-		    $date->setDate($year,$month,$day);
-    	}else{
-    		$date = new \DateTime();
-    	}
+        $date = explode('-', $date);
+        if (is_array($date) && count($date)==3) {
+            $year  = $date[0];
+            $month = $date[1];
+            $day   = $date[2];
 
-    	return $date;
+            $date  = new \DateTime();
+            $date->setDate($year,$month,$day);
+        } else {
+            $date = new \DateTime();
+        }
+
+        return $date;
     }
 
+    /**
+     * Get String for Date
+     *
+     * @param CMContent     $content
+     *
+     * @return CMContent    $content
+     */
     private function getStringDate($content){
-    	$datetime = $content->getCreated();
-    	$datetime = $datetime->format('m/d/Y');
+        $datetime = $content->getCreated();
+        $datetime = $datetime->format('m/d/Y');
 
-    	$content->setCreated($datetime);
+        $content->setCreated($datetime);
 
-    	return $content;
+        return $content;
     }
 
+    /**
+     * Get Metas
+     *
+     * @param CMContent     $content
+     *
+     * @return CMContent    $content
+     */
     private function getMetas($content){
         $metas = $content->getMetas();
-    	if(!$metas->getMetatitle()){
-    		$title = $content->getTitle();
-    		$metas->setMetatitle($title);
-    	}
-    	if(!$metas->getMetadescription()){
-    		$metas->setMetadescription(" ");
-    	}
-    	if(!$metas->getCanonical()){
-    		$metas->setCanonical(" ");
-    	}
+        if (!$metas->getMetatitle()) {
+            $title = $content->getTitle();
+            $metas->setMetatitle($title);
+        }
+        if (!$metas->getMetadescription()) {
+            $metas->setMetadescription(" ");
+        }
+        if (!$metas->getCanonical()) {
+            $metas->setCanonical(" ");
+        }
         $content->setMetas($metas);
 
-    	return $content;
+        return $content;
     }
 
+    /**
+     * Get Copy of Content
+     *
+     * @param CMContent     $content
+     *
+     * @return CMContent    $copy
+     */
     private function getCopyItem($content){
-    	$copy = new CMContent;
+        $copy = new CMContent;
+
         $copy->setTitle($content->getTitle());
         $copy->setDescription($content->getDescription());
+
         return $copy;
     }
 
     /**
-     * @Route("/contents/copy/{id}", name="contents_copy")
-     * @Template("ContentManagerBundle:Langues:list.html.twig")
+     * Copy Content
+     *
+     * @param Request   $request
+     * @param int       $id
+     *
+     * @Route("/content/copy/{id}", name="content_copy")
+     * @Template()
+     *
+     * @return redirect url
      */
     public function copyItemAction(Request $request, $id)
     {
-        $content = $this->getDoctrine()->getRepository('ContentManagerBundle:CMContent')->find($id);
+        $content = $this->getRepository('ContentManagerBundle:CMContent')->find($id);
         $copy = $this->getCopyItem($content);
 
-        $em = $this->getDoctrine()->getManager();
-
         $created = $this->getDateTimeObject($copy->getCreated());
-    	$copy->setCreated($created);
+        $copy->setCreated($created);
 
-    	$copy = $this->getMetas($copy);
+        $copy = $this->getMetas($copy);
 
-       	$em->persist($copy);
-       	$em->flush();
+        $this->persistAndFlush($copy);
 
         return $this->redirect($this->generateUrl('contents'));
     }
 
     /**
-     * @Route("/contents/published/{id}", name="contents_published")
+     * Publish Content
+     *
+     * @param Request   $request
+     * @param int       $id
+     *
+     * @Route("/content/publish/{id}", name="content_publish")
      * @Template()
+     *
+     * @return redirect url
      */
-    public function publishedItemAction(Request $request, $id)
+    public function publishItemAction(Request $request, $id)
     {
-        $content = $this->getDoctrine()->getRepository('ContentManagerBundle:CMContent')->find($id);
+        $content = $this->getRepository('ContentManagerBundle:CMContent')->find($id);
 
-    	if($content->getPublished())
-    		$content->setPublished(0);
-    	else
-    		$content->setPublished(1);
+        if ($content->getPublished())
+            $content->setPublished(0);
+        else
+            $content->setPublished(1);
 
-        $em = $this->getDoctrine()->getManager();
-
-       	$em->persist($content);
-       	$em->flush();
+        $this->persistAndFlush($content);
 
         return $this->redirect($this->generateUrl('contents'));
     }
 
     /**
-     * @Route("/contents/delete/{id}", name="contents_delete")
+     * Delete Content
+     *
+     * @param Request   $request
+     * @param int       $id
+     *
+     * @Route("/content/delete/{id}", name="content_delete")
      * @Template)
+     *
+     * @return redirect url
      */
     public function deleteContentAction(Request $request, $id)
     {
-        $content= $this->getDoctrine()->getRepository('ContentManagerBundle:CMContent')->find($id);
-       	$em = $this->getDoctrine()->getManager();
+        $content= $this->getRepository('ContentManagerBundle:CMContent')->find($id);
 
-       	$em->remove($content);
-       	$em->flush();
+        $this->removeAndFlush($content);
 
-       	return $this->redirect($this->generateUrl('contents'));
+        return $this->redirect($this->generateUrl('contents'));
     }
 
 }

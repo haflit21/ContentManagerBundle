@@ -90,12 +90,14 @@ class CMField
     {
         $this->contentType = new \Doctrine\Common\Collections\ArrayCollection();
         $this->fieldvalues = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->published = 0;
+        $this->created = new \DateTime();
     }
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -111,14 +113,14 @@ class CMField
     public function setType($type)
     {
         $this->type = $type;
-    
+
         return $this;
     }
 
     /**
      * Get type
      *
-     * @return string 
+     * @return string
      */
     public function getType()
     {
@@ -134,14 +136,14 @@ class CMField
     public function setValue($value)
     {
         $this->value = $value;
-    
+
         return $this;
     }
 
     /**
      * Get value
      *
-     * @return string 
+     * @return string
      */
     public function getValue()
     {
@@ -157,14 +159,14 @@ class CMField
     public function setField($field)
     {
         $this->field = $field;
-    
+
         return $this;
     }
 
     /**
      * Get field
      *
-     * @return \stdClass 
+     * @return \stdClass
      */
     public function getField()
     {
@@ -180,14 +182,14 @@ class CMField
     public function setTitle($title)
     {
         $this->title = $title;
-    
+
         return $this;
     }
 
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -203,14 +205,14 @@ class CMField
     public function setName($name)
     {
         $this->name = $name;
-    
+
         return $this;
     }
 
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -226,14 +228,14 @@ class CMField
     public function setPublished($published)
     {
         $this->published = $published;
-    
+
         return $this;
     }
 
     /**
      * Get published
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getPublished()
     {
@@ -249,14 +251,14 @@ class CMField
     public function setCreated($created)
     {
         $this->created = $created;
-    
+
         return $this;
     }
 
     /**
      * Get created
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getCreated()
     {
@@ -272,7 +274,7 @@ class CMField
     public function addContentType(\ContentManagerBundle\ContentManagerBundle\Entity\CMContentType $contentType)
     {
         $this->contentType[] = $contentType;
-    
+
         return $this;
     }
 
@@ -289,7 +291,7 @@ class CMField
     /**
      * Get contentType
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getContentType()
     {
@@ -305,7 +307,7 @@ class CMField
     public function addFieldvalue(\ContentManagerBundle\ContentManagerBundle\Entity\CMFieldValue $fieldvalues)
     {
         $this->fieldvalues[] = $fieldvalues;
-    
+
         return $this;
     }
 
@@ -322,7 +324,7 @@ class CMField
     /**
      * Get fieldvalues
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getFieldvalues()
     {

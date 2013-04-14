@@ -2,12 +2,12 @@
 
 {% block body %}
 
-	<div class="row-fluid">		
+	<div class="row-fluid">
 		<div class="span12">
 			{% for flashMessage in app.session.flashbag.get('info') %}
 			    <div class="alert alert-info">
 			    	<button class="close" data-dismiss="alert" type="button">×</button>
-			        <strong>Notice</strong> 
+			        <strong>Notice</strong>
 			        {{ flashMessage }}
 			    </div>
 			{% endfor %}
@@ -27,10 +27,10 @@
 		    <div class="clear h20"></div>
 
 			{% if type.id != 0 %}
-				<form class="form-horizontal" action="{{path('types_edit', {'id':type.id})}}" method="post" {{ form_enctype(form) }}>
+				<form class="form-horizontal" action="{{path('type_edit', {'id':type.id})}}" method="post" {{ form_enctype(form) }}>
 			{% else %}
-				<form class="form-horizontal" action="{{path('types_new')}}" method="post" {{ form_enctype(form) }}>
-			{% endif %}   
+				<form class="form-horizontal" action="{{path('type_new')}}" method="post" {{ form_enctype(form) }}>
+			{% endif %}
 				<div class="well span8">
 					{{ form_errors(form) }}
 
@@ -52,8 +52,8 @@
 				<div class="well span4">
 					{{ form_rest(form) }}
 				</div>
-				
-			</form> 
+
+			</form>
 		</div>
 	</div>
 

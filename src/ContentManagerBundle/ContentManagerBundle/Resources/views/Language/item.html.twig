@@ -2,12 +2,12 @@
 
 {% block body %}
 
-	<div class="row-fluid">		
+	<div class="row-fluid">
 		<div class="span12">
 			{% for flashMessage in app.session.flashbag.get('info') %}
 			    <div class="alert alert-info">
 			    	<button class="close" data-dismiss="alert" type="button">×</button>
-			        <strong>Notice</strong> 
+			        <strong>Notice</strong>
 			        {{ flashMessage }}
 			    </div>
 			{% endfor %}
@@ -28,10 +28,10 @@
 
 			<div class="well">
 				{% if language.id != 0 %}
-					<form class="form-horizontal" action="{{path('languages_edit', {'id' : language.id })}}" method="post" {{ form_enctype(form) }}>
+					<form class="form-horizontal" action="{{path('language_edit', {'id' : language.id })}}" method="post" {{ form_enctype(form) }}>
 				{% else %}
-					<form class="form-horizontal" action="{{path('languages_new')}}" method="post" {{ form_enctype(form) }}>
-				{% endif %}   
+					<form class="form-horizontal" action="{{path('language_new')}}" method="post" {{ form_enctype(form) }}>
+				{% endif %}
 
 					{{ form_errors(form) }}
 
@@ -79,7 +79,7 @@
 					    <a href="{{ path('languages') }}" class="btn btn-small">Cancel</a>
 				    </div>
 
-				</form> 
+				</form>
 			</div>
 		</div>
 	</div>

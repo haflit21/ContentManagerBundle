@@ -7,14 +7,14 @@
 			{% for flashMessage in app.session.flashbag.get('info') %}
 			    <div class="alert alert-info">
 			    	<button class="close" data-dismiss="alert" type="button">×</button>
-			        <strong>Notice</strong> 
+			        <strong>Notice</strong>
 			        {{ flashMessage }}
 			    </div>
 			{% endfor %}
 			{% for flashMessage in app.session.flashbag.get('error') %}
 			    <div class="alert alert-error">
 			    	<button class="close" data-dismiss="alert" type="button">×</button>
-			        <strong>Error</strong> 
+			        <strong>Error</strong>
 			        {{ flashMessage }}
 			    </div>
 			{% endfor %}
@@ -32,7 +32,7 @@
 	        </table>
 			<a href="#myModal" role="button" class="btn btn-primary btn-small pull-right" data-toggle="modal"><i class="icon icon-plus-sign icon-white"></i> New</a>
 			<div class="modal hide fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-				<form action="{{ path('fields_new') }}" mathod="post">
+				<form action="{{ path('field_new') }}" mathod="post">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 						<h3 id="myModalLabel">Choose your field type</h3>
@@ -68,7 +68,7 @@
 			                  	{{ loop.index }}
 			                </td>
 		                  	<td>
-		                  		<a href="{{ path('fields_edit', {'id' : field.id }) }}">
+		                  		<a href="{{ path('field_edit', {'id' : field.id }) }}">
 		                  			{{ field.title }}
 		                  		</a>
 		                  	</td>
@@ -79,14 +79,14 @@
 		                  		{% if field.field.typefield is defined %}
 		                  			{{ field.field.typefield }}
 		                  		{% endif %}
-		                  	</td>		                  	
+		                  	</td>
 		                  	<td class="center-text">
 		                  		{% for type in field.contentType %}
 		                  			{{ type.title }}
 		                  		{% endfor %}
 		                  	</td>
 		                  	<td class="center-text">
-		                  		<a href="{{ path('fields_published', {'id' : field.id }) }}">
+		                  		<a href="{{ path('field_publish', {'id' : field.id }) }}">
 				                  	{% if field.published %}
 				                  		<i class="icon-ok"></i>
 				                  	{% else %}
@@ -95,12 +95,12 @@
 			                  	</a>
 			                </td>
 		                  	<td class="center-text">
-		                  		<a href="{{ path('fields_edit', {'id' : field.id }) }}"><i class="icon-pencil"></i></a>
-		                  		<a href="{{ path('fields_copy', {'id' : field.id }) }}"><i class="icon-file"></i></a>
-		                  		<a href="{{ path('fields_delete', {'id' : field.id }) }}"><i class="icon-trash"></i></a>
+		                  		<a href="{{ path('field_edit', {'id' : field.id }) }}"><i class="icon-pencil"></i></a>
+		                  		<a href="{{ path('field_copy', {'id' : field.id }) }}"><i class="icon-file"></i></a>
+		                  		<a href="{{ path('field_delete', {'id' : field.id }) }}"><i class="icon-trash"></i></a>
 		                  	</td>
-		                </tr>					
-					{% endfor %} 
+		                </tr>
+					{% endfor %}
 	            </tbody>
 	        </table>
 

@@ -33,12 +33,11 @@ class CMContentTaxonomy
     {
         $this->contents = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -54,7 +53,7 @@ class CMContentTaxonomy
     public function addContent(\ContentManagerBundle\ContentManagerBundle\Entity\CMContent $contents)
     {
         $this->contents[] = $contents;
-    
+
         return $this;
     }
 
@@ -71,7 +70,7 @@ class CMContentTaxonomy
     /**
      * Get contents
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getContents()
     {

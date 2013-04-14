@@ -11,49 +11,81 @@ use ContentManagerBundle\ContentManagerBundle\Entity\CMLanguage;
 use ContentManagerBundle\ContentManagerBundle\Type\LanguageType;
 
 /**
+ * class LanguageController
+ *
  * @Route("/contentmanager")
  */
-class LanguageController extends Controller
+class LanguageController extends DefaultController
 {
     /**
-     * @Route("/languages/list", name="languages")
-     * @Template("ContentManagerBundle:ContentManager:languages-list.html.twig")
+     * List Languages
+     *
+     * @Route("/languages", name="languages")
+     * @Template("ContentManagerBundle:Language:list.html.twig")
+     *
+     * @return array
      */
     public function listAction()
     {
-    	$languages = $this->getDoctrine()->getRepository('ContentManagerBundle:CMLanguage')->findall();
+    	$languages = $this->getRepository('ContentManagerBundle:CMLanguage')->findall();
 
-        return array('languages' => $languages);
+        return array(
+            'languages' => $languages
+        );
     }
 
+    /**
+     * Is default language
+     *
+     * @param CMLanguage $language
+     *
+     * @return boolean
+     */
     private function isDefault($language){
     	$default = $this->loadDefault();
-    	if(!empty($default)){
-    		if($language->getId() == $default->getId()){
+    	if (!empty($default)) {
+    		if ($language->getId() == $default->getId()) {
 	    		return true;
-	    	}
-	    	else{
+	    	} else {
 	    		return false;
 	    	}
     	}
 
-    	return false;    	
+    	return false;
     }
 
+    /**
+     * Have default language
+     *
+     * @return boolean
+     */
     private function haveDefault(){
-    	$language = $this->getDoctrine()->getRepository('ContentManagerBundle:CMLanguage')->findBy(array('default_lan'=>1));
-    	if(!empty($language)){
+    	$language = $this->getRepository('ContentManagerBundle:CMLanguage')->findBy(array('default_lan'=>1));
+    	if (!empty($language)) {
     		return true;
-    	}else{
+    	} else {
     		return false;
     	}
     }
 
+    /**
+     * Load default language
+     *
+     * @return CMLanguage $language
+     */
     private function loadDefault(){
-    	$language = $this->getDoctrine()->getRepository('ContentManagerBundle:CMLanguage')->findBy(array('default_lan'=>1));
+    	$language = $this->getRepository('ContentManagerBundle:CMLanguage')->findBy(array('default_lan'=>1));
+
     	return current($language);
     }
 
+    /**
+     * Manage default language
+     *
+     * @param CMLanguage $language
+     *
+     * @return CMLanguage $language
+     */
    	private function manageDefault($language){
    		if(!$this->isDefault($language)){
    			if($default = $this->loadDefault()){
@@ -62,7 +94,7 @@ class LanguageController extends Controller
 		   		$em = $this->getDoctrine()->getManager();
 		   		$em->persist($default);
 		   		$em->flush();
-   				
+
    				$language->setDefaultLan(1);
    				$language->setPublished(1);
    			}else{
@@ -75,8 +107,14 @@ class LanguageController extends Controller
    	}
 
     /**
-     * @Route("/languages/new", name="languages_new")
-     * @Template("ContentManagerBundle:ContentManager:languages-item.html.twig")
+     * Create Language
+     *
+     * @param Request   $request
+     *
+     * @Route("/language/new", name="language_new")
+     * @Template("ContentManagerBundle:Language:item.html.twig")
+     *
+     * @return array
      */
     public function newItemAction(Request $request)
     {
@@ -86,161 +124,202 @@ class LanguageController extends Controller
         if ($request->isMethod('POST')) {
         	$form->bind($request);
 	        if ($form->isValid()) {
-	        	$em = $this->getDoctrine()->getManager();
-	        	if($language->getDefaultLan()){
+	        	if ($language->getDefaultLan()) {
 	        		$language = $this->manageDefault($language);
-	        	}else{
-	        		if(!$this->haveDefault()){
-	        			$this->get('session')->getFlashBag()->add('info', 'No default language. Please select this one as default');
+	        	} else {
+	        		if (!$this->haveDefault()) {
+	        			$this->addFlashMsg('info', 'No default language. Please select this one as default');
 
-	        			return array('form' => $form->createView(),'language' => $language); 
+	        			return array(
+                            'form'     => $form->createView(),
+                            'language' => $language
+                        );
 	        		}
 	        	}
 
-	        	$em->persist($language);
-	        	$em->flush();
+	        	$this->persistAndFlush($language);
 
 	            return $this->redirect($this->generateUrl('languages'));
 	        }
 	    }
 
-        return array('form' => $form->createView(),'language' => $language); 
+        return array(
+            'form'     => $form->createView(),
+            'language' => $language
+        );
     }
 
     /**
-     * @Route("/languages/edit/{id}", name="languages_edit")
-     * @Template("ContentManagerBundle:ContentManager:languages-item.html.twig")
+     * Edit Language
+     *
+     * @param Request   $request
+     * @param int       $id
+     *
+     * @Route("/language/edit/{id}", name="language_edit")
+     * @Template("ContentManagerBundle:Language:item.html.twig")
+     *
+     * @return array
      */
     public function editItemAction(Request $request, $id)
     {
-        $language = $this->getDoctrine()->getRepository('ContentManagerBundle:CMLanguage')->find($id);
+        $language = $this->getRepository('ContentManagerBundle:CMLanguage')->find($id);
         $form = $this->createForm(new LanguageType(), $language);
 
         if ($request->isMethod('POST')) {
         	$form->bind($request);
 
 	        if ($form->isValid()) {
-	        	$em = $this->getDoctrine()->getManager();
-	        	if($language->getDefaultLan()){
+	        	if ($language->getDefaultLan()) {
 	        		$language = $this->manageDefault($language);
-	        	}else{
-	        		if(!$this->haveDefault()){
-	        			$this->get('session')->getFlashBag()->add('info', 'No default language. Please select this one as default');
+	        	} else {
+	        		if (!$this->haveDefault()) {
+	        			$this->addFlashMsg('info', 'No default language. Please select this one as default');
 
-	        			return array('form' => $form->createView(),'language' => $language); 
+	        			return array(
+                            'form'     => $form->createView(),
+                            'language' => $language
+                        );
 	        		}
 	        	}
 
-	        	$em->persist($language);
-	        	$em->flush();
+	        	$this->persistAndFlush($language);
 
 	            return $this->redirect($this->generateUrl('languages'));
 	        }
 	    }
 
-        return array('form'   => $form->createView(),'language' => $language); 
+        return array(
+            'form'     => $form->createView(),
+            'language' => $language
+        );
     }
 
+    /**
+     * Get copy Language
+     *
+     * @param CMLanguage $language
+     *
+     * @return CMLanguage $copy
+     */
     private function getCopyItem($language){
     	$copy = new CMLanguage;
         $copy->setTitle($language->getTitle());
         $copy->setIso($language->getIso());
+
         return $copy;
     }
 
     /**
-     * @Route("/languages/copy/{id}", name="languages_copy")
+     * Copy Language
+     *
+     * @param Request   $request
+     * @param int       $id
+     *
+     * @Route("/language/copy/{id}", name="language_copy")
      * @Template()
+     *
+     * @return redirect url
      */
     public function copyItemAction(Request $request, $id)
     {
-        $language = $this->getDoctrine()->getRepository('ContentManagerBundle:CMLanguage')->find($id);
+        $language = $this->getRepository('ContentManagerBundle:CMLanguage')->find($id);
         $copy = $this->getCopyItem($language);
 
-        $em = $this->getDoctrine()->getManager();
-
-       	$em->persist($copy);
-       	$em->flush();
+       	$this->persistAndFlush($copy);
 
         return $this->redirect($this->generateUrl('languages'));
     }
 
     /**
-     * @Route("/languages/default/{id}", name="languages_default")
+     * Default Language
+     *
+     * @param Request   $request
+     * @param int       $id
+     *
+     * @Route("/language/default/{id}", name="language_default")
      * @Template()
+     *
+     * @return redirect url
      */
     public function defaultItemAction(Request $request, $id)
     {
-        $language = $this->getDoctrine()->getRepository('ContentManagerBundle:CMLanguage')->find($id);
+        $language = $this->getRepository('ContentManagerBundle:CMLanguage')->find($id);
         $default = $this->loadDefault();
 
-        if(!$language->getDefaultLan()){
-        	if(!empty($default)){
+        if (!$language->getDefaultLan()) {
+        	if (!empty($default)) {
         		$default->setDefaultLan(0);
         	}
         	$language->setDefaultLan(1);
         	$language->setPublished(1);
-        }else{
-        	$this->get('session')->getFlashBag()->add('error', 'You can\'t change state of this element' );
-			
+        } else {
+        	$this->addFlashMsg('error', 'You can\'t change state of this element' );
+
 			return $this->redirect($this->generateUrl('languages'));
         }
 
-        $em = $this->getDoctrine()->getManager();
-
-       	$em->persist($language);
+       	$this->persist($language);
         if(!empty($default)){
-       		$em->persist($default);
+       		$this->persist($default);
         }
-       	$em->flush();
+       	$this->flush();
 
         return $this->redirect($this->generateUrl('languages'));
     }
 
     /**
-     * @Route("/languages/published/{id}", name="languages_published")
+     * Publish Language
+     *
+     * @param Request   $request
+     * @param int       $id
+     *
+     * @Route("/language/publish/{id}", name="language_publish")
      * @Template()
+     *
+     * @return redirect url
      */
-    public function publishedItemAction(Request $request, $id)
+    public function publishItemAction(Request $request, $id)
     {
-        $language = $this->getDoctrine()->getRepository('ContentManagerBundle:CMLanguage')->find($id);
+        $language = $this->getRepository('ContentManagerBundle:CMLanguage')->find($id);
 
-        if(!$language->getDefaultLan()){
-        	if($language->getPublished())
+        if (!$language->getDefaultLan()) {
+        	if ($language->getPublished())
         		$language->setPublished(0);
         	else
         		$language->setPublished(1);
-        }else{
-        	$this->get('session')->getFlashBag()->add('error', 'You can\'t change unpublished this element' );
-			
+        } else {
+        	$this->addFlashMsg('error', 'You can\'t change unpublished this element' );
+
 			return $this->redirect($this->generateUrl('languages'));
         }
 
-        $em = $this->getDoctrine()->getManager();
-
-       	$em->persist($language);
-       	$em->flush();
+       	$this->persistAndFlush($language);
 
         return $this->redirect($this->generateUrl('languages'));
     }
 
     /**
-     * @Route("/languages/delete/{id}", name="languages_delete")
+     * Delete Language
+     *
+     * @param Request   $request
+     * @param int       $id
+     *
+     * @Route("/language/delete/{id}", name="language_delete")
      * @Template()
+     *
+     * @return redirect url
      */
     public function deleteAction(Request $request, $id)
     {
-        $language = $this->getDoctrine()->getRepository('ContentManagerBundle:CMLanguage')->find($id);
-       	$em = $this->getDoctrine()->getManager();
+        $language = $this->getRepository('ContentManagerBundle:CMLanguage')->find($id);
 
-       	if($this->isDefault($language)){
-			$this->get('session')->getFlashBag()->add('error', 'You can delete the default language');
-			
+       	if ($this->isDefault($language)) {
+			$this->addFlashMsg('error', 'You can delete the default language');
+
 			return $this->redirect($this->generateUrl('languages'));
 		}
 
-       	$em->remove($language);
-       	$em->flush();
+       	$this->removeAndFlush($language);
 
        	return $this->redirect($this->generateUrl('languages'));
     }

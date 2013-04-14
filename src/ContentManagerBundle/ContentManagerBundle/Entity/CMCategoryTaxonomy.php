@@ -32,11 +32,11 @@ class CMCategoryTaxonomy
     {
         $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -52,7 +52,7 @@ class CMCategoryTaxonomy
     public function addCategorie(\ContentManagerBundle\ContentManagerBundle\Entity\CMCategory $categories)
     {
         $this->categories[] = $categories;
-    
+
         return $this;
     }
 
@@ -69,7 +69,7 @@ class CMCategoryTaxonomy
     /**
      * Get categories
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getCategories()
     {

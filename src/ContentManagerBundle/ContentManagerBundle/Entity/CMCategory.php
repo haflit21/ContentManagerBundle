@@ -76,11 +76,11 @@ class CMCategory
         $this->translations = new \Doctrine\Common\Collections\ArrayCollection();
         $this->contents = new \Doctrine\Common\Collections\ArrayCollection();
     }
-    
+
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -96,14 +96,14 @@ class CMCategory
     public function setTitle($title)
     {
         $this->title = $title;
-    
+
         return $this;
     }
 
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -119,14 +119,14 @@ class CMCategory
     public function setDescription($description)
     {
         $this->description = $description;
-    
+
         return $this;
     }
 
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -142,14 +142,14 @@ class CMCategory
     public function setLanguage(\ContentManagerBundle\ContentManagerBundle\Entity\CMLanguage $language = null)
     {
         $this->language = $language;
-    
+
         return $this;
     }
 
     /**
      * Get language
      *
-     * @return \ContentManagerBundle\ContentManagerBundle\Entity\CMLanguage 
+     * @return \ContentManagerBundle\ContentManagerBundle\Entity\CMLanguage
      */
     public function getLanguage()
     {
@@ -165,7 +165,7 @@ class CMCategory
     public function addTranslation(\ContentManagerBundle\ContentManagerBundle\Entity\CMCategory $translations)
     {
         $this->translations[] = $translations;
-    
+
         return $this;
     }
 
@@ -182,7 +182,7 @@ class CMCategory
     /**
      * Get translations
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getTranslations()
     {
@@ -198,14 +198,14 @@ class CMCategory
     public function setReferenceCategory(\ContentManagerBundle\ContentManagerBundle\Entity\CMCategory $referenceCategory = null)
     {
         $this->referenceCategory = $referenceCategory;
-    
+
         return $this;
     }
 
     /**
      * Get referenceCategory
      *
-     * @return \ContentManagerBundle\ContentManagerBundle\Entity\CMCategory 
+     * @return \ContentManagerBundle\ContentManagerBundle\Entity\CMCategory
      */
     public function getReferenceCategory()
     {
@@ -221,14 +221,14 @@ class CMCategory
     public function setTaxonomy(\ContentManagerBundle\ContentManagerBundle\Entity\CMCategoryTaxonomy $taxonomy = null)
     {
         $this->taxonomy = $taxonomy;
-    
+
         return $this;
     }
 
     /**
      * Get taxonomy
      *
-     * @return \ContentManagerBundle\ContentManagerBundle\Entity\CMCategoryTaxonomy 
+     * @return \ContentManagerBundle\ContentManagerBundle\Entity\CMCategoryTaxonomy
      */
     public function getTaxonomy()
     {
@@ -244,7 +244,7 @@ class CMCategory
     public function addContent(\ContentManagerBundle\ContentManagerBundle\Entity\CMContent $contents)
     {
         $this->contents[] = $contents;
-    
+
         return $this;
     }
 
@@ -261,7 +261,7 @@ class CMCategory
     /**
      * Get contents
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getContents()
     {
@@ -277,14 +277,14 @@ class CMCategory
     public function setPublished($published)
     {
         $this->published = $published;
-    
+
         return $this;
     }
 
     /**
      * Get published
      *
-     * @return boolean 
+     * @return boolean
      */
     public function getPublished()
     {

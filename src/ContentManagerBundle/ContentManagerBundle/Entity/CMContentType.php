@@ -27,7 +27,7 @@ class CMContentType
      * @ORM\Column(name="title", type="string", length=255)
      */
     private $title;
-    
+
      /**
      * @ORM\ManyToMany(targetEntity="CMField", mappedBy="contentType")
      */
@@ -45,7 +45,7 @@ class CMContentType
      */
     private $template;
 
-    
+
     /**
      * Constructor
      */
@@ -65,7 +65,7 @@ class CMContentType
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -81,14 +81,14 @@ class CMContentType
     public function setTitle($title)
     {
         $this->title = $title;
-    
+
         return $this;
     }
 
     /**
      * Get title
      *
-     * @return string 
+     * @return string
      */
     public function getTitle()
     {
@@ -104,14 +104,14 @@ class CMContentType
     public function setTemplate($template)
     {
         $this->template = $template;
-    
+
         return $this;
     }
 
     /**
      * Get template
      *
-     * @return string 
+     * @return string
      */
     public function getTemplate()
     {
@@ -127,7 +127,7 @@ class CMContentType
     public function addField(\ContentManagerBundle\ContentManagerBundle\Entity\CMField $fields)
     {
         $this->fields[] = $fields;
-    
+
         return $this;
     }
 
@@ -144,7 +144,7 @@ class CMContentType
     /**
      * Get fields
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getFields()
     {
@@ -160,7 +160,7 @@ class CMContentType
     public function addContent(\ContentManagerBundle\ContentManagerBundle\Entity\CMContent $content)
     {
         $this->content[] = $content;
-    
+
         return $this;
     }
 
@@ -177,7 +177,7 @@ class CMContentType
     /**
      * Get content
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getContent()
     {

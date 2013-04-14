@@ -1,13 +1,23 @@
 {% extends('::admin.html.twig') %}
 
+{% block title %}
+    {% if referenceCategory is defined %}
+        Category - Edit
+    {% elseif category.id != 0 %}
+        Category - Edit
+    {% else %}
+        Category - New
+    {% endif %}
+{% endblock %}
+
 {% block body %}
 
-    <div class="row-fluid">     
+    <div class="row-fluid">
         <div class="span12">
             {% for flashMessage in app.session.flashbag.get('info') %}
                 <div class="alert alert-info">
                     <button class="close" data-dismiss="alert" type="button">×</button>
-                    <strong>Notice</strong> 
+                    <strong>Notice</strong>
                     {{ flashMessage }}
                 </div>
             {% endfor %}
@@ -26,14 +36,14 @@
              <a href="{{ path('categories') }}" class="btn btn-small pull-right"><i class="icon icon-chevron-left"></i> Retour</a>
              <div class="clear h20"></div>
 
-            
+
             {% if referenceCategory is defined %}
-                <form class="form-horizontal" action="{{path('categories_translation', {'lang' : lang, 'reference' : referenceCategory})}}" method="post" {{ form_enctype(form) }}>
+                <form class="form-horizontal" action="{{path('category_translation', {'lang' : lang, 'reference' : referenceCategory})}}" method="post" {{ form_enctype(form) }}>
             {% elseif category.id != 0 %}
-                <form class="form-horizontal" action="{{path('categories_edit', {'id' : category.id })}}" method="post" {{ form_enctype(form) }}>
+                <form class="form-horizontal" action="{{path('category_edit', {'id' : category.id })}}" method="post" {{ form_enctype(form) }}>
             {% else %}
-                <form class="form-horizontal" action="{{path('categories_new', {'lang' : lang })}}" method="post" {{ form_enctype(form) }}>
-            {% endif %} 
+                <form class="form-horizontal" action="{{path('category_new', {'lang' : lang })}}" method="post" {{ form_enctype(form) }}>
+            {% endif %}
                 <div class="well span8">
                     {{ form_errors(form) }}
 
@@ -71,7 +81,7 @@
                 </div>
 
                 {{ form_rest(form) }}
-            </form> 
+            </form>
         </div>
     </div>
 

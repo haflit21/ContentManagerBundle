@@ -41,12 +41,11 @@ class CMMetas
      * @ORM\Column(name="canonical", type="string", length=255, nullable=true)
      */
     private $canonical;
-    
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -62,14 +61,14 @@ class CMMetas
     public function setMetatitle($metatitle)
     {
         $this->metatitle = $metatitle;
-    
+
         return $this;
     }
 
     /**
      * Get metatitle
      *
-     * @return string 
+     * @return string
      */
     public function getMetatitle()
     {
@@ -85,14 +84,14 @@ class CMMetas
     public function setMetadescription($metadescription)
     {
         $this->metadescription = $metadescription;
-    
+
         return $this;
     }
 
     /**
      * Get metadescription
      *
-     * @return string 
+     * @return string
      */
     public function getMetadescription()
     {
@@ -108,14 +107,14 @@ class CMMetas
     public function setCanonical($canonical)
     {
         $this->canonical = $canonical;
-    
+
         return $this;
     }
 
     /**
      * Get canonical
      *
-     * @return string 
+     * @return string
      */
     public function getCanonical()
     {

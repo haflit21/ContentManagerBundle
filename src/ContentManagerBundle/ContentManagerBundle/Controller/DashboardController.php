@@ -9,16 +9,18 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 /**
+ * class DashboardController
+ *
  * @Route("/contentmanager")
  */
-class DashboardController extends Controller
+class DashboardController extends DefaultController
 {
-	/**
+    /**
      * @Route("/dashboard", name="dashboard")
      * @Template()
      */
     public function dashboardAction()
     {
-    	return array();
+        return array();
     }
 }

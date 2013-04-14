@@ -13,172 +13,198 @@ use ContentManagerBundle\ContentManagerBundle\Entity\CMCategoryTaxonomy;
 use ContentManagerBundle\ContentManagerBundle\Type\CategoryType;
 
 /**
+ * class CategoryController
+ *
  * @Route("/contentmanager")
  */
-class CategoryController extends Controller
+class CategoryController extends DefaultController
 {
-	/**
-     * @Route("/categories/list", name="categories")
-     * @Template("ContentManagerBundle:ContentManager:category-list.html.twig")
+    /**
+     * List Categories
+     *
+     * @Route("/categories", name="categories")
+     * @Template("ContentManagerBundle:Category:list.html.twig")
+     *
+     * @return array
      */
-    public function listCategoriesAction()
+    public function listAction()
     {
-
         $defaultLanguage = $this->getLanguageDefault();
 
-        if(empty($defaultLanguage)){
-            $this->get('session')->getFlashBag()->add('error', 'No default language exist. Please create one.');
-            
-            return array('display'=>false); 
+        if (empty($defaultLanguage)) {
+            $this->addFlashMsg('error', 'No default language exist. Please create one.');
+
+            return array(
+                'display' => false
+            );
         }
-        
-        $languages = $this->getLanguages();
-        $categories = $this->getDoctrine()->getRepository('ContentManagerBundle:CMCategory')->getCategoriesByLangId($defaultLanguage->getId());
 
-        $request = $this->getRequest();
-        $locale = $request->getLocale();
+        $languages  = $this->getLanguages();
+        $categories = $this->getRepository('ContentManagerBundle:CMCategory')->getCategoriesByLangId($defaultLanguage->getId());
+        $locale     = $this->getLocale();
 
-        return array('categories'=>$categories, 'defaultLanguage'=>$defaultLanguage, 'languages'=>$languages, 'display'=>true);
+        return array(
+            'categories'      => $categories,
+            'defaultLanguage' => $defaultLanguage,
+            'languages'       => $languages,
+            'display'         => true
+        );
     }
 
-    private function getLanguageDefault(){
-        $language = $this->getDoctrine()->getRepository('ContentManagerBundle:CMLanguage')->findBy(array('default_lan'=>'1'));
-        $language = current($language);
-
-        return $language;
-    }
-
-    private function getLanguages(){
-        $languages = $this->getDoctrine()->getRepository('ContentManagerBundle:CMLanguage')->findBy(array('default_lan'=>'0', 'published'=>'1'));
-
-        return $languages;
-    }
-
-	/**
-     * @Route("/categories/new/{lang}", name="categories_new")
-     * @Template("ContentManagerBundle:ContentManager:category-item.html.twig")
+    /**
+     * Create Category
+     *
+     * @param Request   $request
+     * @param int        $lang
+     *
+     * @Route("/category/new/{lang}", name="category_new")
+     * @Template("ContentManagerBundle:Category:item.html.twig")
+     *
+     * @return array
      */
     public function newItemAction(Request $request, $lang)
     {
 
         $category = new CMCategory;
-        $language = $this->getDoctrine()->getRepository('ContentManagerBundle:CMLanguage')->find($lang);
+        $language = $this->getRepository('ContentManagerBundle:CMLanguage')->find($lang);
         $category->setLanguage($language);
-        $form = $this->createForm(new CategoryType(), $category);
+        $form     = $this->createForm(new CategoryType(), $category);
 
         if ($request->isMethod('POST')) {
-        	$form->bind($request);            
-	        if ($form->isValid()) {
-
-                $em = $this->getDoctrine()->getManager();
+            $form->bind($request);
+            if ($form->isValid()) {
 
                 $categoryTaxonomy = new CMCategoryTaxonomy;
                 $categoryTaxonomy->addCategorie($category);
-                $em->persist($categoryTaxonomy);
-                $em->flush();
+                $this->persistAndFlush($categoryTaxonomy);
 
                 $category->setTaxonomy($categoryTaxonomy);
-                $em->persist($category);
-                $em->flush();
-
-                return $this->redirect($this->generateUrl('categories'));
-	        }
-	    }
-
-        return array('form' => $form->createView(),'category' => $category, 'lang' => $lang);
-    }
-
-    /**
-     * @Route("/categories/translation/{reference}/{lang}", name="categories_translation")
-     * @Template("ContentManagerBundle:ContentManager:category-item.html.twig")
-     */
-    public function newItemTranslationAction(Request $request, $reference, $lang)
-    {
-        $category = new CMCategory;
-        $language = $this->getDoctrine()->getRepository('ContentManagerBundle:CMLanguage')->find($lang);
-        $category->setLanguage($language);
-        $form = $this->createForm(new CategoryType(), $category);
-
-        if ($request->isMethod('POST')) {
-            $form->bind($request);            
-            if ($form->isValid()) {
-
-                $em = $this->getDoctrine()->getManager();
-
-                $categoryTaxonomy = $this->getDoctrine()->getRepository('ContentManagerBundle:CMCategoryTaxonomy')->find($reference);
-                $categoryTaxonomy->addCategorie($category);
-                $em->persist($categoryTaxonomy);
-                $em->flush();
-
-                $category->setTaxonomy($categoryTaxonomy);
-                $em->persist($category);
-                $em->flush();
+                $this->persistAndFlush($category);
 
                 return $this->redirect($this->generateUrl('categories'));
             }
         }
 
-        return array('form' => $form->createView(),'category' => $category, 'lang' => $lang, 'referenceCategory'=>$reference); 
+        return array(
+            'form'     => $form->createView(),
+            'category' => $category,
+            'lang'     => $lang
+        );
     }
 
     /**
-     * @Route("/categories/edit/{id}", name="categories_edit")
-     * @Template("ContentManagerBundle:ContentManager:category-item.html.twig")
+     * Create Category Translation
+     *
+     * @param Request   $request
+     * @param int       $reference
+     * @param int       $lang
+     *
+     * @Route("/category/translation/{reference}/{lang}", name="category_translation")
+     * @Template("ContentManagerBundle:Category:item.html.twig")
+     *
+     * @return array
+     */
+    public function newItemTranslationAction(Request $request, $reference, $lang)
+    {
+        $category = new CMCategory;
+        $language = $this->getRepository('ContentManagerBundle:CMLanguage')->find($lang);
+        $category->setLanguage($language);
+        $form     = $this->createForm(new CategoryType(), $category);
+
+        if ($request->isMethod('POST')) {
+            $form->bind($request);
+            if ($form->isValid()) {
+
+                $categoryTaxonomy = $this->getRepository('ContentManagerBundle:CMCategoryTaxonomy')->find($reference);
+                $categoryTaxonomy->addCategorie($category);
+                $this->persistAndFlush($categoryTaxonomy);
+
+                $category->setTaxonomy($categoryTaxonomy);
+                $this->persistAndFlush($category);
+
+                return $this->redirect($this->generateUrl('categories'));
+            }
+        }
+
+        return array(
+            'form'              => $form->createView(),
+            'category'          => $category,
+            'lang'              => $lang,
+            'referenceCategory' =>$reference
+        );
+    }
+
+    /**
+     * Edit Category
+     *
+     * @param Request   $request
+     * @param int       $id
+     *
+     * @Route("/category/edit/{id}", name="category_edit")
+     * @Template("ContentManagerBundle:Category:item.html.twig")
+     *
+     * @return array
      */
     public function editItemAction(Request $request, $id)
     {
-        $category = $this->getDoctrine()->getRepository('ContentManagerBundle:CMCategory')->find($id);
-
-        $form = $this->createForm(new CategoryType(), $category);
+        $category = $this->getRepository('ContentManagerBundle:CMCategory')->find($id);
+        $form     = $this->createForm(new CategoryType(), $category);
 
         if ($request->isMethod('POST')) {
-        	$form->bind($request);
-	        if ($form->isValid()) {
+            $form->bind($request);
+            if ($form->isValid()) {
 
-	        	$em = $this->getDoctrine()->getManager();
+                $this->persistAndFlush($category);
 
-	        	$em->persist($category);
-	        	$em->flush();
+                return $this->redirect($this->generateUrl('categories'));
+            }
+        }
 
-	            return $this->redirect($this->generateUrl('categories'));
-	        }
-	    }
-
-        return array('form' => $form->createView(),'category' => $category); 
+        return array(
+            'form'     => $form->createView(),
+            'category' => $category
+        );
     }
 
     /**
-     * @Route("/categories/published/{id}", name="categories_published")
+     * Publish Category
+     *
+     * @param int $id
+     *
+     * @Route("/category/publish/{id}", name="category_publish")
      * @Template()
+     *
+     * @return redirect url
      */
-    public function publishedItemAction(Request $request, $id)
+    public function publishItemAction($id)
     {
-        $category = $this->getDoctrine()->getRepository('ContentManagerBundle:CMCategory')->find($id);
+        $category = $this->getRepository('ContentManagerBundle:CMCategory')->find($id);
 
-        if($category->getPublished())
+        if ($category->getPublished())
             $category->setPublished(0);
         else
             $category->setPublished(1);
 
-        $em = $this->getDoctrine()->getManager();
-
-        $em->persist($category);
-        $em->flush();
+        $this->persistAndFlush($category);
 
         return $this->redirect($this->generateUrl('categories'));
     }
 
     /**
-     * @Route("/categories/delete/{id}", name="categories_delete")
+     * Delete Category
+     *
+     * @param int $id
+     *
+     * @Route("/category/delete/{id}", name="category_delete")
      * @Template()
+     *
+     * @return redirect url
      */
     public function deleteItemAction($id)
     {
-        $category = $this->getDoctrine()->getRepository('ContentManagerBundle:CMCategory')->find($id);
+        $category = $this->getRepository('ContentManagerBundle:CMCategory')->find($id);
 
-        $em = $this->getDoctrine()->getManager();
-        $em->remove($category);
-        $em->flush();
+        $this->removeAndFlush($category);
 
         return $this->redirect($this->generateUrl('categories'));
     }

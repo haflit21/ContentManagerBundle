@@ -8,7 +8,7 @@ use Doctrine\Common\Persistence\ObjectManager;
 use ContentManagerBundle\ContentManagerBundle\Entity\CMLanguage;
 
 /**
- * Load GameData
+ * Load ContentManager
  */
 class LoadContentManagerData implements FixtureInterface
 {
@@ -19,14 +19,16 @@ class LoadContentManagerData implements FixtureInterface
      */
     public function load(ObjectManager $manager)
     {
+        // Set default languages
         $langs = $this->getLangues();
-        foreach ($langs as $key => $lg) {            
+        foreach ($langs as $key => $lg) {
             $lang = new CMLanguage;
+
             $lang->setTitle($lg['title']);
             $lang->setIso($lg['iso']);
             $lang->setPublished($lg['published']);
             $lang->setDefaultLan($lg['default']);
-            
+
             $manager->persist($lang);
         }
 

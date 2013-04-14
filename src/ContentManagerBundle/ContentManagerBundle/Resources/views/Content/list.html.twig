@@ -7,14 +7,14 @@
 			{% for flashMessage in app.session.flashbag.get('info') %}
 			    <div class="alert alert-info">
 			    	<button class="close" data-dismiss="alert" type="button">×</button>
-			        <strong>Notice</strong> 
+			        <strong>Notice</strong>
 			        {{ flashMessage }}
 			    </div>
 			{% endfor %}
 			{% for flashMessage in app.session.flashbag.get('error') %}
 			    <div class="alert alert-error">
 			    	<button class="close" data-dismiss="alert" type="button">×</button>
-			        <strong>Error</strong> 
+			        <strong>Error</strong>
 			        {{ flashMessage }}
 			    </div>
 			{% endfor %}
@@ -102,7 +102,7 @@
 				                  				<img src="{{ asset('bundles/contentmanager/img/flags/'~language.iso~'.png') }}" class="flag" alt="{{ language.iso }}">
 				                  			</a>
 				                  		{% endif %}
-			                			{% set found = false %}				                  	
+			                			{% set found = false %}
 			                  		{% endfor %}
 			                  	</td>
 			                  	<td class="center-text">
@@ -127,7 +127,7 @@
 											<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 											<h3 id="myModalLabel">Manage Translations</h3>
 										</div>
-										<div class="modal-body">			                  	
+										<div class="modal-body">
 											<table class="table table-striped table-bordered">
 							      				<thead>
 									                <tr>
@@ -182,19 +182,19 @@
 												                  	</td>
 												                </tr>
 										      			{% endif %}
-														{% set found = false %}				                  	
+														{% set found = false %}
 									  				{% endfor %}
 										  		</tbody>
 										    </table>
 										</div>
 									</div>
 			                  	</td>
-			                </tr>					
-						{% endfor %} 
+			                </tr>
+						{% endfor %}
 		            </tbody>
 		        </table>
 		    {% endif %}
 	    </div>
-	</div>	
+	</div>
 
 {% endblock body %}

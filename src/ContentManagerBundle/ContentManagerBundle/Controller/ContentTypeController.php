@@ -11,103 +11,140 @@ use ContentManagerBundle\ContentManagerBundle\Entity\CMContentType;
 use ContentManagerBundle\ContentManagerBundle\Type\ContentTypeType;
 
 /**
+ * class ContentController
+ *
  * @Route("/contentmanager")
  */
-class ContentTypeController extends Controller
+class ContentTypeController extends DefaultController
 {
-     /**
-     * @Route("/contenttypes/list", name="types")
-     * @Template("ContentManagerBundle:ContentManager:types-list.html.twig")
+    /**
+     * List Content Types
+     *
+     * @Route("/contentTypes", name="types")
+     * @Template("ContentManagerBundle:Type:list.html.twig")
+     *
+     * @return array
      */
     public function listAction()
     {
-        $types = $this->getDoctrine()->getRepository('ContentManagerBundle:CMContentType')->findAll();
+        $types = $this->getRepository('ContentManagerBundle:CMContentType')->findAll();
 
-        return array('types'=>$types);
-    }
-    
-     /**
-     * @Route("/contenttypes/new", name="types_new")
-     * @Template("ContentManagerBundle:ContentManager:types-item.html.twig")
-     */
-    public function newItemAction(Request $request)
-    {
-        $type = new CMContentType; 
-        $form = $this->createForm(new ContentTypeType(), $type);  
-
-        if ($request->isMethod('POST')) {
-            $form->bind($request);
-            if ($form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-
-                $em->persist($type);
-                $em->flush();
-
-                return $this->redirect($this->generateUrl('types'));
-            }
-        }
-
-        return array('form' => $form->createView(),'type' => $type); 
+        return array(
+            'types'=>$types
+        );
     }
 
     /**
-     * @Route("/contenttypes/edit/{id}", name="types_edit")
-     * @Template("ContentManagerBundle:ContentManager:types-item.html.twig")
+     * Create Content Type
+     *
+     * @param Request $request
+     *
+     * @Route("/contentType/new", name="type_new")
+     * @Template("ContentManagerBundle:Type:item.html.twig")
+     *
+     * @return array
      */
-    public function editItemAction(Request $request, $id)
+    public function newItemAction(Request $request)
     {
-        $type = $this->getDoctrine()->getRepository('ContentManagerBundle:CMContentType')->find($id);
+        $type = new CMContentType;
         $form = $this->createForm(new ContentTypeType(), $type);
 
         if ($request->isMethod('POST')) {
             $form->bind($request);
             if ($form->isValid()) {
-                $em = $this->getDoctrine()->getManager();
-
-                $em->persist($type);
-                $em->flush();
+                $this->persistAndFlush($type);
 
                 return $this->redirect($this->generateUrl('types'));
             }
         }
 
-        return array('form' => $form->createView(),'type' => $type); 
+        return array(
+            'form' => $form->createView(),
+            'type' => $type
+        );
     }
 
+    /**
+     * Edit Content Type
+     *
+     * @param Request $request
+     *
+     * @Route("/contentType/edit/{id}", name="type_edit")
+     * @Template("ContentManagerBundle:Type:item.html.twig")
+     *
+     * @return array
+     */
+    public function editItemAction(Request $request, $id)
+    {
+        $type = $this->getRepository('ContentManagerBundle:CMContentType')->find($id);
+        $form = $this->createForm(new ContentTypeType(), $type);
+
+        if ($request->isMethod('POST')) {
+            $form->bind($request);
+            if ($form->isValid()) {
+                $this->persistAndFlush($type);
+
+                return $this->redirect($this->generateUrl('types'));
+            }
+        }
+
+        return array(
+            'form' => $form->createView(),
+            'type' => $type
+        );
+    }
+
+    /**
+     * Get Copy of ContentType
+     *
+     * @param CMContent     $content
+     *
+     * @return CMContent    $copy
+     */
     private function getCopyItem($type){
         $copy = new CMContentType;
         $copy->setTitle($type->getTitle());
+        $copy->setTemplate($type->getTemplate());
         return $copy;
     }
 
     /**
-     * @Route("/contenttypes/copy/{id}", name="types_copy")
-     * @Template("ContentManagerBundle:ContentManager:list.html.twig")
+     * Copy ContentType
+     *
+     * @param Request   $request
+     * @param int       $id
+     *
+     * @Route("/contentType/copy/{id}", name="type_copy")
+     * @Template()
+     *
+     * @return redirect url
      */
     public function copyItemAction(Request $request, $id)
     {
-        $type = $this->getDoctrine()->getRepository('ContentManagerBundle:CMContentType')->find($id);
+        $type = $this->getRepository('ContentManagerBundle:CMContentType')->find($id);
         $copy = $this->getCopyItem($type);
 
-        $em = $this->getDoctrine()->getManager();
-
-        $em->persist($copy);
-        $em->flush();
+        $this->persistAndFlush($copy);
 
         return $this->redirect($this->generateUrl('types'));
     }
 
     /**
-     * @Route("/contenttypes/delete/{id}", name="types_delete")
-     * @Template("ContentManagerBundle:ContentManager:list.html.twig")
+     * Delete ContentType
+     *
+     * @param Request   $request
+     * @param int       $id
+     *
+     * @Route("/contentType/delete/{id}", name="type_delete")
+     * @Template("ContentManagerBundle:Type:list.html.twig")
+     *
+     * @return redirect url
      */
     public function deleteAction(Request $request, $id)
     {
-        $type = $this->getDoctrine()->getRepository('ContentManagerBundle:CMContentType')->find($id);
-        $em = $this->getDoctrine()->getManager();
+        $type = $this->getRepository('ContentManagerBundle:CMContentType')->find($id);
 
-        $em->remove($type);
-        $em->flush();
+        $this->removeAndFlush($type);
 
         return $this->redirect($this->generateUrl('types'));
     }

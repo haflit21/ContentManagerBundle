@@ -2,12 +2,12 @@
 
 {% block body %}
 
-	<div class="row-fluid">		
+	<div class="row-fluid">
 		<div class="span12">
 			{% for flashMessage in app.session.flashbag.get('info') %}
 			    <div class="alert alert-info">
 			    	<button class="close" data-dismiss="alert" type="button">×</button>
-			        <strong>Notice</strong> 
+			        <strong>Notice</strong>
 			        {{ flashMessage }}
 			    </div>
 			{% endfor %}
@@ -27,10 +27,10 @@
 		    <div class="clear h20"></div>
 
 			{% if field.id != 0 %}
-				<form class="form-horizontal" action="{{path('fields_edit', {'id':field.id})}}" method="post" {{ form_enctype(form) }}>
+				<form class="form-horizontal" action="{{path('field_edit', {'id':field.id})}}" method="post" {{ form_enctype(form) }}>
 			{% else %}
-				<form class="form-horizontal" action="{{path('fields_new')}}" method="post" {{ form_enctype(form) }}>
-			{% endif %}   
+				<form class="form-horizontal" action="{{path('field_new')}}" method="post" {{ form_enctype(form) }}>
+			{% endif %}
 				<div class="well span8">
 					{{ form_errors(form) }}
 
@@ -97,14 +97,14 @@
 
 
 				{{ form_rest(form) }}
-			</form> 
+			</form>
 		</div>
 	</div>
 
 {% endblock body %}
 
 {% block javascripts %}
-	
+
 	$(function(){
 		$('.datepicker').datepicker();
 	})
