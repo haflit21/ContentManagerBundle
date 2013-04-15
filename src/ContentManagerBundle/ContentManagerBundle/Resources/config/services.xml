@@ -5,7 +5,7 @@
     xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <parameters>
-        <parameter key="contentmanager.cutword.class">ContentManagerBundle\ContentManagerBundle\Twig\Extension\CutWordExtension</parameter>
+        <parameter key="contentmanager.cutword.class">ContentManagerBundle\ContentManagerBundle\Twig\HtmlExtension</parameter>
     </parameters>
 
     <services>

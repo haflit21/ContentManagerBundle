@@ -7,7 +7,7 @@ use Twig_Filter_Method;
 use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Bundle\TwigBundle\Loader\FilesystemLoader;
 
-class CutWordExtension extends \Twig_Extension
+class HtmlExtension extends \Twig_Extension
 {
     public function getFilters()
     {
@@ -21,7 +21,7 @@ class CutWordExtension extends \Twig_Extension
         if (strlen($content)>$length)
             $content = substr((strip_tags($content)), 0, strrpos((substr((strip_tags($content)), 0, $length)), $cutOn)).$after;
 
-        return $price;
+        return $content;
     }
 
     public function getName()

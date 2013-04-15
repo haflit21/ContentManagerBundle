@@ -47,7 +47,7 @@
                     <tr>
                         <td class="center-text">{{ category.id }}</td>
                         <td class="center-text"><a href="{{ path('category_edit', { 'id': category.id }) }}">{{ category.title }}</a></td>
-                        <td class="center-text">{{ category.description|cutWord() }}</td>
+                        <td class="center-text">{{ category.description|cutWord }}</td>
                           <td class="center-text"><img src="{{ asset('bundles/contentmanager/img/flags/'~category.language.iso~'.png') }}" height="23px" style="height:23px;" alt="{{ category.language.iso }}">
                           </td>
                           <td class="center-text">
