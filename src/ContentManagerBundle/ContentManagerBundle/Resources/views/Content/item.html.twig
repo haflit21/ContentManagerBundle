@@ -2,12 +2,12 @@
 
 {% block body %}
 
-	<div class="row-fluid">		
+	<div class="row-fluid">
 		<div class="span12">
 			{% for flashMessage in app.session.flashbag.get('info') %}
 			    <div class="alert alert-info">
 			    	<button class="close" data-dismiss="alert" type="button">×</button>
-			        <strong>Notice</strong> 
+			        <strong>Notice</strong>
 			        {{ flashMessage }}
 			    </div>
 			{% endfor %}
@@ -25,14 +25,14 @@
 
 		     <a href="{{ path('contents') }}" class="btn btn-small pull-right"><i class="icon icon-chevron-left"></i> Retour</a>
 		     <div class="clear h20"></div>
-			
+
 			{% if referenceContent is defined %}
-				<form class="form-horizontal" action="{{path('contents_translation', {'lang' : lang, 'reference' : referenceContent, 'contenttype': contenttype })}}" method="post" {{ form_enctype(form) }}>
+				<form class="form-horizontal" action="{{path('content_translation', {'lang' : lang, 'reference' : referenceContent, 'contenttype': contenttype })}}" method="post" {{ form_enctype(form) }}>
 			{% elseif content.id != 0 %}
-				<form class="form-horizontal" action="{{path('contents_edit', {'id' : content.id })}}" method="post" {{ form_enctype(form) }}>
+				<form class="form-horizontal" action="{{path('content_edit', {'id' : content.id })}}" method="post" {{ form_enctype(form) }}>
 			{% else %}
-				<form class="form-horizontal" action="{{path('contents_new', {'lang': lang})}}" method="post" {{ form_enctype(form) }}>
-			{% endif %} 
+				<form class="form-horizontal" action="{{path('content_new', {'lang': lang})}}" method="post" {{ form_enctype(form) }}>
+			{% endif %}
 				<div class="well span8">
 					{{ form_errors(form) }}
 
@@ -114,14 +114,14 @@
 
 
 				{{ form_rest(form) }}
-			</form> 
+			</form>
 		</div>
 	</div>
 
 {% endblock body %}
 
 {% block javascripts %}
-	
+
 	$(function(){
 		$('.datepicker').datepicker();
 	})

@@ -35,7 +35,7 @@
 			{% if display %}
 				<a href="#myModal" role="button" class="btn btn-primary btn-small pull-right" data-toggle="modal"><i class="icon icon-plus-sign icon-white"></i> New</a>
 				<div class="modal hide fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-					<form action="{{ path('contents_new', {'lang' : defaultLanguage.id }) }}" mathod="post">
+					<form action="{{ path('content_new', {'lang' : defaultLanguage.id }) }}" mathod="post">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
 							<h3 id="myModalLabel">Choose your content type</h3>
@@ -73,7 +73,7 @@
 				                  	{{ loop.index }}
 				                </td>
 			                  	<td>
-			                  		<a href="{{ path('contents_edit', {'id' : content.id }) }}">
+			                  		<a href="{{ path('content_edit', {'id' : content.id }) }}">
 			                  			{{ content.title }}
 			                  		</a>
 			                  	</td>
@@ -93,12 +93,12 @@
 			                  			{% endfor %}
 				                  		{% if found != false %}
 				                  			{% set found = found - 1 %}
-				                  			<a href="{{ path('contents_edit', { 'id' : content.taxonomy.contents[found].id }) }}" class="flag-element">
+				                  			<a href="{{ path('content_edit', { 'id' : content.taxonomy.contents[found].id }) }}" class="flag-element">
 				                  				<img src="{{ asset('bundles/contentmanager/img/flags/'~language.iso~'.png') }}" class="flag" alt="{{ language.iso }}">
 				                  				<img src="{{ asset('bundles/contentmanager/img/flags/flag-ok.png') }}" class="flag-ok" alt="{{ language.iso }}">
 				                  			</a>
 				                  		{% else %}
-				                  			<a href="{{ path('contents_translation', {'lang' : language.id, 'reference': content.taxonomy.id, 'contenttype': content.contenttype.id }) }}">
+				                  			<a href="{{ path('content_translation', {'lang' : language.id, 'reference': content.taxonomy.id, 'contenttype': content.contenttype.id }) }}">
 				                  				<img src="{{ asset('bundles/contentmanager/img/flags/'~language.iso~'.png') }}" class="flag" alt="{{ language.iso }}">
 				                  			</a>
 				                  		{% endif %}
@@ -106,7 +106,7 @@
 			                  		{% endfor %}
 			                  	</td>
 			                  	<td class="center-text">
-			                  		<a href="{{ path('contents_published', {'id' : content.id }) }}">
+			                  		<a href="{{ path('content_publish', {'id' : content.id }) }}">
 					                  	{% if content.published %}
 					                  		<i class="icon-ok"></i>
 					                  	{% else %}
@@ -118,9 +118,9 @@
 			                  		{{ content.created|date('m/d/y') }}
 			                  	</td>
 			                  	<td class="center-text">
-			                  		<a href="{{ path('contents_edit', {'id' : content.id }) }}"><i class="icon-pencil"></i></a>
-			                  		<a href="{{ path('contents_copy', {'id' : content.id }) }}"><i class="icon-file"></i></a>
-			                  		<a href="{{ path('contents_delete', {'id' : content.id }) }}"><i class="icon-trash"></i></a>
+			                  		<a href="{{ path('content_edit', {'id' : content.id }) }}"><i class="icon-pencil"></i></a>
+			                  		<a href="{{ path('content_copy', {'id' : content.id }) }}"><i class="icon-file"></i></a>
+			                  		<a href="{{ path('content_delete', {'id' : content.id }) }}"><i class="icon-trash"></i></a>
 			                  		<a href="#manageTranslation" role="button" data-toggle="modal"><i class="icon-globe"></i></a>
 			                  		<div class="modal hide fade" id="manageTranslation" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
 				                  		<div class="modal-header">
@@ -153,7 +153,7 @@
 												                  		{{ loop.index }}
 												                	</td>
 											                  		<td>
-											                  			<a href="{{ path('contents_edit', {'id' : content.taxonomy.contents[found].id }) }}">
+											                  			<a href="{{ path('content_edit', {'id' : content.taxonomy.contents[found].id }) }}">
 											                  				{{ content.taxonomy.contents[found].title }}
 											                  			</a>
 											                  		</td>
@@ -165,7 +165,7 @@
 											                  			{% endif %}
 											                  		</td>
 											                  		<td class="center-text">
-												                  		<a href="{{ path('contents_published', {'id' : content.taxonomy.contents[found].id }) }}">
+												                  		<a href="{{ path('content_publish', {'id' : content.taxonomy.contents[found].id }) }}">
 														                  	{% if content.taxonomy.contents[found].published %}
 														                  		<i class="icon-ok"></i>
 														                  	{% else %}
@@ -177,8 +177,8 @@
 												                  		{{ content.taxonomy.contents[found].created|date('m/d/y') }}
 												                  	</td>
 												                  	<td class="center-text">
-												                  		<a href="{{ path('contents_edit', {'id' : content.taxonomy.contents[found].id }) }}"><i class="icon-pencil"></i></a>
-												                  		<a href="{{ path('contents_delete', {'id' : content.taxonomy.contents[found].id }) }}"><i class="icon-trash"></i></a>
+												                  		<a href="{{ path('content_edit', {'id' : content.taxonomy.contents[found].id }) }}"><i class="icon-pencil"></i></a>
+												                  		<a href="{{ path('content_delete', {'id' : content.taxonomy.contents[found].id }) }}"><i class="icon-trash"></i></a>
 												                  	</td>
 												                </tr>
 										      			{% endif %}

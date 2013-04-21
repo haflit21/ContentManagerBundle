@@ -114,6 +114,7 @@ class ContentController extends DefaultController
                  * ContentManagerBundle\ContentManagerBundle\Classes\ExtraFields
                  * saveFields : used to save all fields add to a content type
                  */
+                $em = $this->getEntityManager();
                 ExtraFields::saveFields($this, $em, $request, $content, $contenttype);
                 $this->persistAndFlush($content);
 
@@ -155,7 +156,7 @@ class ContentController extends DefaultController
         if ($request->isMethod('POST')) {
             $form->bind($request);
             if ($form->isValid()) {
-                $referenceArticle = $this->getRepository('CMSContentBundle:CMContent')->find($reference);
+                $referenceArticle = $this->getRepository('ContentManagerBundle:CMContent')->find($reference);
                 $content->setReferenceContent($referenceArticle);
 
                 $taxonomy = $this->getRepository('ContentManagerBundle:CMContentTaxonomy')->find($reference);
@@ -171,6 +172,11 @@ class ContentController extends DefaultController
 
                 $this->persistAndFlush($taxonomy);
                 $contenttype = $request->request->get('contenttype');
+                /*
+                 * ContentManagerBundle\ContentManagerBundle\Classes\ExtraFields
+                 * saveFields : used to save all fields add to a content type
+                 */
+                $em = $this->getEntityManager();
                 ExtraFields::saveFields($this, $em, $request, $content, $contenttype);
                 $this->persistAndFlush($content);
 
@@ -419,6 +425,25 @@ class ContentController extends DefaultController
         $this->removeAndFlush($content);
 
         return $this->redirect($this->generateUrl('contents'));
+    }
+
+    /**
+     * Delete Translations
+     *
+     * @param CMContent   $content
+     *
+     * @return CMContent  $content
+     */
+    private function deleteTranslation($content){
+        $translations = $content->getTranslations();
+
+        foreach ($translations as $key => $translation) {
+            $this->removeAndFlush($translation);
+        }
+
+        $content->setTranslations(new \Doctrine\Common\Collections\ArrayCollection());
+
+        return $content;
     }
 
 }

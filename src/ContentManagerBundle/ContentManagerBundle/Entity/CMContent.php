@@ -68,12 +68,12 @@ class CMContent
     private $published;
 
     /**
-     * @ORM\OneToMany(targetEntity="CMContent", mappedBy="referenceContent")
+     * @ORM\OneToMany(targetEntity="CMContent", mappedBy="referenceContent", cascade={"remove", "persist"})
      */
     private $translations;
 
     /**
-     * @ORM\OneToOne(targetEntity="CMMetas")
+     * @ORM\OneToOne(targetEntity="CMMetas", cascade={"remove", "persist"})
      * @ORM\JoinColumn(name="meta_id")
      */
     private $metas;
