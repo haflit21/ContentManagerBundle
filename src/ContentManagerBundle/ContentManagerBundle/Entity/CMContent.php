@@ -102,6 +102,8 @@ class CMContent
         $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
         $this->translations = new \Doctrine\Common\Collections\ArrayCollection();
         $this->fieldvalues = new \Doctrine\Common\Collections\ArrayCollection();
+
+        $this->published = 0;
     }
 
 
@@ -386,6 +388,14 @@ class CMContent
     public function getTranslations()
     {
         return $this->translations;
+    }
+
+    /**
+     * Clean translations
+     */
+    public function cleanTranslations()
+    {
+        $this->translations = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**

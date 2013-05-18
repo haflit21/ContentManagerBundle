@@ -422,7 +422,7 @@ class ContentController extends DefaultController
     {
         $content= $this->getRepository('ContentManagerBundle:CMContent')->find($id);
 
-        $this->removeAndFlush($content);
+        $this->deleteTranslation($content);
 
         return $this->redirect($this->generateUrl('contents'));
     }
@@ -435,15 +435,16 @@ class ContentController extends DefaultController
      * @return CMContent  $content
      */
     private function deleteTranslation($content){
-        $translations = $content->getTranslations();
+        $taxonomy = $content->getTaxonomy();
+        $translations = $taxonomy->getContents();
 
         foreach ($translations as $key => $translation) {
             $this->removeAndFlush($translation);
         }
 
-        $content->setTranslations(new \Doctrine\Common\Collections\ArrayCollection());
+        $this->removeAndFlush($taxonomy);
 
-        return $content;
+        return true;
     }
 
 }

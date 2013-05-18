@@ -38,9 +38,9 @@ class SelectField extends Fields
         $options = $this->params['options'];
         $html = '<div class="control-group"><div class="control-label">'.$field->getTitle().'</div>';
         if($options['multiple']){
-            $html .= '<div class="controls"><select name="'.$field->getName().'[]" multiple>'.$values.'</select></div></div>';          
+            $html .= '<div class="controls"><select name="'.$field->getName().'[]" multiple>'.$values.'</select></div></div>';
         }else{
-            $html .= '<div class="controls"><select name="'.$field->getName().'" '.$multiple.'>'.$values.'</select></div></div>';      
+            $html .= '<div class="controls"><select name="'.$field->getName().'" >'.$values.'</select></div></div>';
         }
         return $html;
     }
@@ -55,7 +55,7 @@ class SelectField extends Fields
             if($multiple){
                 $isselected = (in_array($option[0],$value))?'selected="selected"':'';
             }else{
-                $isselected = ($option[0]==$value)?'selected="selected"':'';                
+                $isselected = ($option[0]==$value)?'selected="selected"':'';
             }
             $html .= '<option value="'.$option[0].'" '.$isselected.'>'.$option[1].'</option>';
         }

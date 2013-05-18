@@ -34,6 +34,7 @@ class TextAreaField extends Fields
     }
 
     public function displayfield($field, $value=null){
+        $value = $value ? : $this->params['defaultvalue'];
         $useeditor = $this->params['useeditor'];
         $html = '<div class="control-group"><div class="control-label">'.$field->getTitle().'</div>';
         $name = $field->getName();
@@ -42,7 +43,7 @@ class TextAreaField extends Fields
             $html .= '
                     <script type="text/javascript" src="/ContentManagerBundle/web/bundles/trsteelckeditor/ckeditor.js"></script>
                     <script type="text/javascript">
-                        CKEDITOR.replace("'.$name.'",{width: "100%",height: "320",language: "en-au",uiColor: "#fff",toolbar: [{"name":"document","items":["Source","-","Save","-","Templates"]},{"name":"basicstyles","items":["Bold","Italic","Underline","Strike","Subscript","Superscript","-","RemoveFormat"]}]}); 
+                        CKEDITOR.replace("'.$name.'",{width: "100%",height: "320",language: "en-au",uiColor: "#fff",toolbar: [{"name":"document","items":["Source","-","Save","-","Templates"]},{"name":"basicstyles","items":["Bold","Italic","Underline","Strike","Subscript","Superscript","-","RemoveFormat"]}]});
                     </script>
                     ';
         }*/
